@@ -1,10 +1,12 @@
+import Link from "next/link"; // Import Link
+
 const PopularSearch = () => {
   return (
     <div className="popular-searches" data-aos="fade-up" data-aos-delay="1000">
       <span className="title">Popular Searches : </span>
-      <a href="#">Designer</a>, <a href="#">Developer</a>, <a href="#">Web</a>,
-      <a href="#"> IOS</a>, <a href="#">PHP</a>, <a href="#">Senior</a>,
-      <a href="#"> Engineer</a>,
+      <Link href="/job-list-v2">Designer</Link>, <Link href="/job-list-v2">Developer</Link>, <Link href="/job-list-v2">Web</Link>,
+      <Link href="/job-list-v2"> IOS</Link>, <Link href="/job-list-v2">PHP</Link>, <Link href="/job-list-v2">Senior</Link>,
+      <Link href="/job-list-v2"> Engineer</Link>,
     </div>
   );
 };

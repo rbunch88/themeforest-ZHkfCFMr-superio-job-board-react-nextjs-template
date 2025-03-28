@@ -22,7 +22,7 @@ const JobFeatured3 = () => {
                 />
               </span>
               <h4>
-                <Link href={`/job-single-v4/${item.id}`}>{item.jobTitle}</Link>
+                <Link href={`/job-single-v1/${item.id}`}>{item.jobTitle}</Link> {/* Updated path */}
               </h4>
 
               <ul className="job-info">

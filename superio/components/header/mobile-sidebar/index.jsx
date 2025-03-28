@@ -1,11 +1,10 @@
 "use client";
 
 import {
-
   Sidebar,
   Menu,
   MenuItem,
-  SubMenu,
+  // SubMenu removed as we no longer have nested items
 } from "react-pro-sidebar";
 
 import mobileMenuData from "../../../data/mobileMenuData";
@@ -13,15 +12,14 @@ import SidebarFooter from "./SidebarFooter";
 import SidebarHeader from "./SidebarHeader";
 import {
   isActiveLink,
-  isActiveParentChaild,
+  // isActiveParentChaild removed as it's no longer needed
 } from "../../../utils/linkActiveChecker";
 import { usePathname, useRouter } from "next/navigation";
 
 
 const Index = () => {
-
-  const router = useRouter()
-
+  const router = useRouter();
+  const pathname = usePathname(); // Get pathname for active link checking
 
   return (
     <div
@@ -33,39 +31,26 @@ const Index = () => {
       <SidebarHeader />
       {/* End pro-header */}
 
-      
-        <Sidebar>
-          <Menu>
-            {mobileMenuData.map((item) => (
-              <SubMenu
-                className={
-                  isActiveParentChaild(item.items, usePathname())
-                    ? "menu-active"
-                    : ""
-                }
-                label={item.label}
-                key={item.id}
-              >
-                {item.items.map((menuItem, i) => (
-                  <MenuItem
-
-                  onClick={()=>router.push(menuItem.routePath)}
-                    className={
-                      isActiveLink(menuItem.routePath, usePathname())
-                        ? "menu-active-link"
-                        : ""
-                    }
-                    key={i}
-                    // routerLink={<Link href={menuItem.routePath} />}
-                  >
-                    {menuItem.name}
-                  </MenuItem>
-                ))}
-              </SubMenu>
-            ))}
-          </Menu>
-        </Sidebar>
-
+      <Sidebar>
+        <Menu>
+          {/* Iterate directly over the flat mobileMenuData array */}
+          {mobileMenuData.map((menuItem) => (
+            <MenuItem
+              key={menuItem.id}
+              onClick={() => router.push(menuItem.routePath)}
+              className={
+                isActiveLink(menuItem.routePath, pathname)
+                  ? "menu-active-link"
+                  : ""
+              }
+              // The routerLink prop is commented out in original, keeping it that way
+              // routerLink={<Link href={menuItem.routePath} />}
+            >
+              {menuItem.label} {/* Use label from the data */}
+            </MenuItem>
+          ))}
+        </Menu>
+      </Sidebar>
 
       <SidebarFooter />
     </div>

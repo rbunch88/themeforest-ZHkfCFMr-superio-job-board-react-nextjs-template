@@ -34,7 +34,7 @@ const DefaulHeader2 = () => {
         <div className="nav-outer">
           <div className="logo-box">
             <div className="logo">
-              <Link href="/">
+              <Link href="/home-3"> {/* Updated logo link to correct homepage */}
                 <Image
                   width={154}
                   height={50}
