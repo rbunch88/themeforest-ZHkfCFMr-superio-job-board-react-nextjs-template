@@ -15,6 +15,7 @@
 *   [ ] Content Update - Frontend (Placeholders)
 *   [x] Footer Cleanup/Update
 *   [ ] Other Component Cleanup (Related to pruned pages)
+    *   [x] Review/Update links in `home-3` components (`JobFeatured3`, `SearchForm2`, `PopularSearch`, `TopCompany`, `DefaulHeader2`)
 
 ## Phase 2: Backend Integration &amp; Supabase Setup
 
