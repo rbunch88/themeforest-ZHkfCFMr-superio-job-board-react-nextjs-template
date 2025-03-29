@@ -9,15 +9,8 @@ const About2 = () => {
       <div className="content-column col-lg-6 col-md-12 col-sm-12 order-2">
         <div className="inner-column" data-aos="fade-left">
           <div className="sec-title">
-            <h2>
-              Get applications from the <br />
-              world best talents.
-            </h2>
-            <div className="text">
-              Search all the open positions on the web. Get your own
-              personalized salary estimate. Read reviews on over 600,000
-              companies worldwide.
-            </div>
+            <h2>Reach ABA Professionals Who Think Like You Do.</h2>
+            <div className="text">Stop sorting through generic applications. Post on My ABA Jobs to connect with data-driven, client-centered BCBAs, RBTs, and specialists who are passionate about effective, ethical ABA. Find candidates ready to contribute meaningfully to your team from day one.</div>
           </div>
           <ul className="list-style-one">
             <li>Bring to the table win-win survival</li>
@@ -28,7 +21,7 @@ const About2 = () => {
             href="/employers-dashboard/post-jobs"
             className="theme-btn btn-style-one"
           >
-            Post a Job
+            Post Your Job &amp; Connect with ABA Experts Today
           </Link>
         </div>
       </div>

@@ -2,3 +2,16 @@
 @import "slick-carousel/slick/slick-theme.css";
 @import "~bootstrap/scss/bootstrap";
 @import "public/scss/main.scss";
+
+
+/* Hero Headline Emphasis Styles */
+.hero-emphasis-italic {
+  font-style: italic;
+}
+.hero-emphasis-bold {
+  font-weight: bold;
+}
+.hero-emphasis-brand {
+  font-weight: bold;
+  color: #1967d2;
+}

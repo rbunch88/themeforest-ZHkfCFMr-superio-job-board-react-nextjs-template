@@ -16,20 +16,14 @@ const index = ({ footerStyle = "" }) => {
                     <Image
                       width={154}
                       height={50}
-                      src="/images/logo.svg"
+                      src="/images/logos/myabajobslogo-square-white.svg"
                       alt="brand"
                     />
                   </a>
                 </div>
-                <p className="phone-num">
-                  <span>Call us </span>
-                  <a href="thebeehost@support.com">123 456 7890</a>
-                </p>
                 <p className="address">
-                  329 Queensberry Street, North Melbourne VIC
-                  <br /> 3051, Australia. <br />
-                  <a href="mailto:support@superio.com" className="email">
-                    support@superio.com
+                  <a href="mailto:info@myabajobs.com" className="email">
+                    info@myabajobs.com
                   </a>
                 </p>
               </div>

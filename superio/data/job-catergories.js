@@ -1,51 +1,51 @@
+// Placeholder icons and job numbers used
 module.exports = [
   {
     id: 1,
-    icon: "flaticon-money-1",
-    catTitle: "Accounting / Finance",
-    jobNumber: "2",
+    icon: "flaticon-briefcase", // Placeholder icon
+    catTitle: "BCBA Roles",
+    jobNumber: "0", // Placeholder number
   },
   {
     id: 2,
-    icon: "flaticon-promotion",
-    catTitle: "Marketing",
-    jobNumber: "86",
+    icon: "flaticon-user", // Placeholder icon
+    catTitle: "RBT & Technician Positions",
+    jobNumber: "0", // Placeholder number
   },
-  { id: 3, icon: "flaticon-vector", catTitle: "Design", jobNumber: "43" },
+  {
+    id: 3,
+    icon: "flaticon-leader", // Placeholder icon
+    catTitle: "Clinical Supervisors & Directors",
+    jobNumber: "0", // Placeholder number
+  },
   {
     id: 4,
-    icon: "flaticon-web-programming",
-    catTitle: "Development",
-    jobNumber: "12",
+    icon: "flaticon-school", // Placeholder icon
+    catTitle: "School-Based ABA",
+    jobNumber: "0", // Placeholder number
   },
   {
     id: 5,
-    icon: "flaticon-headhunting",
-    catTitle: "Human Resource",
-    jobNumber: "55",
+    icon: "flaticon-hospital", // Placeholder icon
+    catTitle: "Clinic-Based Opportunities",
+    jobNumber: "0", // Placeholder number
   },
   {
     id: 6,
-    icon: "flaticon-rocket-ship",
-    catTitle: "Automotive Jobs",
-    jobNumber: "2",
+    icon: "flaticon-house", // Placeholder icon
+    catTitle: "Home & Community Settings",
+    jobNumber: "0", // Placeholder number
   },
   {
     id: 7,
-    icon: "flaticon-money-1",
-    catTitle: "Customer Service",
-    jobNumber: "2",
+    icon: "flaticon-remote-control", // Placeholder icon
+    catTitle: "Remote ABA Jobs",
+    jobNumber: "0", // Placeholder number
   },
   {
     id: 8,
-    icon: "flaticon-first-aid-kit-1",
-    catTitle: "Health and Care",
-    jobNumber: "25",
-  },
-  {
-    id: 9,
-    icon: "flaticon-car",
-    catTitle: "Project Management",
-    jobNumber: "92",
+    icon: "flaticon-meeting", // Placeholder icon
+    catTitle: "Organizational Behavior Management (OBM)",
+    jobNumber: "0", // Placeholder number
   },
 ];

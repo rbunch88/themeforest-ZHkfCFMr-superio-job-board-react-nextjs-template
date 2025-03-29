@@ -41,8 +41,8 @@ const index = () => {
       <section className="job-categories">
         <div className="auto-container">
           <div className="sec-title text-center">
-            <h2>Popular Job Categories</h2>
-            <div className="text">2020 jobs live - 293 added today.</div>
+            <h2>Focus Your Impact: Explore Roles by Specialty &amp; Setting</h2>
+            <div className="text">Find opportunities where your unique skills in assessment, intervention, and data analysis will make a real difference.</div>
           </div>
 
           <div className="row" data-aos="fade-up">
@@ -55,10 +55,7 @@ const index = () => {
       <section className="job-section">
         <div className="auto-container">
           <div className="sec-title text-center">
-            <h2>Featured Jobs</h2>
-            <div className="text">
-              Know your worth and find the job that qualify your life
-            </div>
+            <h2>Advance Your Career: Featured Roles Offering Growth &amp; Impact</h2>
           </div>
           {/* End .sec-title */}
 
@@ -101,10 +98,8 @@ const index = () => {
           {/* End right img group */}
 
           <div className="sec-title text-center">
-            <h2>Testimonials From Our Customers</h2>
-            <div className="text">
-              Lorem ipsum dolor sit amet elit, sed do eiusmod tempor
-            </div>
+            <h2>Tired of Hitting a Wall? See How Others Leveled Up with My ABA Jobs.</h2>
+            <div className="text">Real stories from ABA pros who found supportive roles and reignited their passion:</div>
           </div>
           {/* <!-- Sec Title --> */}
 
@@ -121,11 +116,8 @@ const index = () => {
       <section className="top-companies">
         <div className="auto-container">
           <div className="sec-title">
-            <h2>Top Company Registered</h2>
-            <div className="text">
-              Some of the companies we have helped recruit excellent applicants
-              over the years.
-            </div>
+            <h2>Connect with ABA Practices Committed to Quality Care &amp; Staff Support</h2>
+            <div className="text">Discover employers who invest in their teams, value ethical practices, and provide environments where you can do your best work.</div>
           </div>
 
           <div className="carousel-outer" data-aos="fade-up">
@@ -149,7 +141,9 @@ const index = () => {
       <section className="pricing-section">
         <div className="auto-container">
           <div className="sec-title text-center">
-            <h2>Pricing Packages</h2>
+            <h2>
+              Invest in Finding the <em>Right</em> BCBA or RBT. Build a Team That Lasts.
+            </h2>
             <div className="text">
               Lorem ipsum dolor sit amet elit, sed do eiusmod tempor.
             </div>

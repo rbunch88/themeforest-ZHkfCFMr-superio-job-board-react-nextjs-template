@@ -12,7 +12,8 @@
     *   [x] Refactor `HeaderNavContent.jsx`
     *   [x] Refactor `mobile-sidebar/index.jsx`
 *   [ ] UI/UX Customization (Styling, Layouts)
-*   [ ] Content Update - Frontend (Placeholders)
+*   [x] Content Update - Frontend (Placeholders)
+  *   [x] Update `home-3` content (excluding Pricing) based on copy doc
 *   [x] Footer Cleanup/Update
 *   [ ] Other Component Cleanup (Related to pruned pages)
     *   [x] Review/Update links in `home-3` components (`JobFeatured3`, `SearchForm2`, `PopularSearch`, `TopCompany`, `DefaulHeader2`)

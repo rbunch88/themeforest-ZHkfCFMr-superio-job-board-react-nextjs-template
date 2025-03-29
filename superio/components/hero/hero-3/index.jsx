@@ -11,11 +11,10 @@ const index = () => {
             <div className="inner-column">
               <div className="title-box" data-aos="fade-up">
                 <h3>
-                  Join us & Explore Thousands <br /> of Jobs
+                  Feeling <span className="hero-emphasis-italic">Stuck?</span> Stop Searching, Start <span className="hero-emphasis-bold">Growing.</span> <br />
+                  <span className="hero-emphasis-brand">My ABA Jobs</span> Connects You to Roles Where Your ABA Expertise <span className="hero-emphasis-bold">Thrives.</span>
                 </h3>
-                <div className="text">
-                  Find Jobs, Employment & Career Opportunities
-                </div>
+                <div className="text">Skip the noise of generic boards. Find rewarding BCBA, RBT, and leadership roles in supportive, ethical environments.</div>
               </div>
 
               {/* <!-- Job Search Form --> */}
