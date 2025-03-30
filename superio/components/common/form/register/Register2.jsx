@@ -1,17 +1,24 @@
 
 'use client'
 
+import { useState } from 'react'; // Import useState
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import LoginWithSocial from "./LoginWithSocial";
 import FormContent2 from "./FormContent2";
 import Link from "next/link";
 
 const Register2 = () => {
+  const [selectedRole, setSelectedRole] = useState('candidate'); // Add state for role
+
+  const handleTabSelect = (index) => {
+    setSelectedRole(index === 0 ? 'candidate' : 'employer'); // Update role based on tab index
+  };
+
   return (
     <div className="form-inner">
-      <h3>Create a Free Superio Account</h3>
+      <h3>Create a Free My ABA Jobs Account</h3> {/* Update Title */}
 
-      <Tabs>
+      <Tabs onSelect={handleTabSelect}> {/* Add onSelect handler */}
         <div className="form-group register-dual">
           <TabList className="btn-box row">
             <Tab className="col-lg-6 col-md-12">
@@ -30,12 +37,12 @@ const Register2 = () => {
         {/* End .form-group */}
 
         <TabPanel>
-          <FormContent2 />
+          <FormContent2 role={selectedRole} /> {/* Pass role prop */}
         </TabPanel>
-        {/* End cadidates Form */}
+        {/* End Candidates Form */}
 
         <TabPanel>
-          <FormContent2 />
+          <FormContent2 role={selectedRole} /> {/* Pass role prop */}
         </TabPanel>
         {/* End Employer Form */}
       </Tabs>

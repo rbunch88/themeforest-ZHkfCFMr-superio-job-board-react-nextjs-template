@@ -7,10 +7,30 @@ import DetailsContent from "@/components/blog-meu-pages/blog-details/details-con
 import blogs from "@/data/blogs";
 import Image from "next/image";
 
-export const metadata = {
-  title: "Blog Details Dyanmic V1 || Superio - Job Borad React NextJS Template",
-  description: "Superio - Job Borad React NextJS Template",
-};
+// Function to generate dynamic metadata
+export async function generateMetadata({ params }) {
+  const id = params.id;
+  const blog = blogs.find((item) => item.id == id); // Find the specific blog post
+
+  if (!blog) {
+    // Fallback if blog post not found
+    return {
+      title: "Blog Post Not Found | My ABA Jobs",
+      description: "The requested blog post could not be found on the My ABA Jobs blog.",
+    };
+  }
+
+  // Construct dynamic title and description
+  // Using blogSingleTitle if available, otherwise a generic title
+  const title = `${blog.blogSingleTitle || 'Blog Post'} | My ABA Jobs Blog`;
+  // Description could be improved later if blog data includes excerpts
+  const description = `Read the article "${blog.blogSingleTitle || 'Blog Post'}" on the My ABA Jobs blog for insights into ABA careers and the industry.`; // Corrected typo
+
+  return {
+    title: title,
+    description: description,
+  };
+}
 
 const BlogDetailsDynamic = ({ params }) => {
   const id = params.id;

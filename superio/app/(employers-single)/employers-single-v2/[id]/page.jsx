@@ -11,11 +11,28 @@ import Social from "@/components/employer-single-pages/social/Social";
 import PrivateMessageBox from "@/components/employer-single-pages/shared-components/PrivateMessageBox";
 import Image from "next/image";
 
-export const metadata = {
-  title:
-    "Employers Single Dyanmic V2 || Superio - Job Borad React NextJS Template",
-  description: "Superio - Job Borad React NextJS Template",
-};
+// Function to generate dynamic metadata
+export async function generateMetadata({ params }) {
+  const id = params.id;
+  const employer = employersInfo.find((item) => item.id == id); // Find the specific employer
+
+  if (!employer) {
+    // Fallback if employer not found
+    return {
+      title: "Employer Not Found | My ABA Jobs",
+      description: "The requested employer profile could not be found on My ABA Jobs.",
+    };
+  }
+
+  // Construct dynamic title and description
+  const title = `${employer.name} | Employer Profile | My ABA Jobs`;
+  const description = `Learn more about ${employer.name}, an employer hiring on My ABA Jobs. View open positions and company details.`; // Corrected typo
+
+  return {
+    title: title,
+    description: description,
+  };
+}
 
 const EmployersSingleV2 = ({ params }) => {
   const id = params.id;

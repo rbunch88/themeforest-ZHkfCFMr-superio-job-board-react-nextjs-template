@@ -3,10 +3,8 @@ import dynamic from "next/dynamic";
 import CandidatesList from "@/components/candidates-listing-pages/candidates-list-v1";
 
 export const metadata = {
-  title: 'Candidates List V1 || Superio - Job Borad React NextJS Template',
-  description:
-    'Superio - Job Borad React NextJS Template',
-  
+  title: "ABA Job Seekers & Professionals | My ABA Jobs",
+  description: "Browse profiles of talented BCBAs, RBTs, and other ABA professionals seeking new opportunities on My ABA Jobs.",
 }
 
 

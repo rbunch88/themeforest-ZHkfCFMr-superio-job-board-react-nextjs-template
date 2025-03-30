@@ -2,8 +2,8 @@ import dynamic from "next/dynamic";
 import DashboadHome from "@/components/dashboard-pages/employers-dashboard/dashboard";
 
 export const metadata = {
-  title: "Employeers Dashboard || Superio - Job Borad React NextJS Template",
-  description: "Superio - Job Borad React NextJS Template",
+  title: "Employer Dashboard | My ABA Jobs",
+  description: "Manage your company profile, job postings, and applications on the My ABA Jobs employer dashboard.",
 };
 
 const index = () => {

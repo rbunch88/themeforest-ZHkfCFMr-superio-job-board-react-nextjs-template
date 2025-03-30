@@ -2,8 +2,8 @@ import dynamic from "next/dynamic";
 import JobList from "@/components/job-listing-pages/job-list-v2";
 
 export const metadata = {
-  title: "Job List V2 || Superio - Job Borad React NextJS Template",
-  description: "Superio - Job Borad React NextJS Template",
+  title: "Browse ABA Jobs | My ABA Jobs",
+  description: "Search and apply for the latest BCBA, RBT, and other ABA therapy jobs. Filter by location, specialty, and setting on My ABA Jobs.",
 };
 
 const index = () => {

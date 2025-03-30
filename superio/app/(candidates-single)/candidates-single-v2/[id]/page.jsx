@@ -12,11 +12,28 @@ import JobSkills from "@/components/candidates-single-pages/shared-components/Jo
 import AboutVideo from "@/components/candidates-single-pages/shared-components/AboutVideo";
 import Image from "next/image";
 
-export const metadata = {
-  title:
-    "Candidate Single Dynamic V2 || Superio - Job Borad React NextJS Template",
-  description: "Superio - Job Borad React NextJS Template",
-};
+// Function to generate dynamic metadata
+export async function generateMetadata({ params }) {
+  const id = params.id;
+  const candidate = candidates.find((item) => item.id == id); // Find the specific candidate
+
+  if (!candidate) {
+    // Fallback if candidate not found
+    return {
+      title: "Candidate Not Found | My ABA Jobs",
+      description: "The requested candidate profile could not be found on My ABA Jobs.",
+    };
+  }
+
+  // Construct dynamic title and description
+  const title = `${candidate.name} | ${candidate.designation || 'ABA Professional'} | My ABA Jobs`;
+  const description = `View the profile of ${candidate.name}, a ${candidate.designation || 'skilled ABA professional'} based in ${candidate.location}, on My ABA Jobs.`; // Corrected typo
+
+  return {
+    title: title,
+    description: description,
+  };
+}
 
 const CandidateSingleDynamicV2 = ({ params }) => {
   const id = params.id;

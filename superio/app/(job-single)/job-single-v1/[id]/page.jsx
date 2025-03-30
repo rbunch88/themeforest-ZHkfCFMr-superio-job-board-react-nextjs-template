@@ -14,10 +14,29 @@ import JobDetailsDescriptions from "@/components/job-single-pages/shared-compone
 import ApplyJobModalContent from "@/components/job-single-pages/shared-components/ApplyJobModalContent";
 import Image from "next/image";
 
-export const metadata = {
-  title: "Job Single Dyanmic V1 || Superio - Job Borad React NextJS Template",
-  description: "Superio - Job Borad React NextJS Template",
-};
+// Function to generate dynamic metadata
+export async function generateMetadata({ params }) {
+  const id = params.id;
+  const job = jobs.find((item) => item.id == id); // Find the specific job
+
+  if (!job) {
+    // Fallback if job not found
+    return {
+      title: "Job Not Found | My ABA Jobs",
+      description: "The requested job could not be found on My ABA Jobs.",
+    };
+  }
+
+  // Construct dynamic title and description
+  const title = `${job.jobTitle} at ${job.company} | My ABA Jobs`;
+  const description = `Apply for the ${job.jobTitle} position at ${job.company} located in ${job.location}. Find more ABA jobs on My ABA Jobs.`; // Corrected typo
+
+  return {
+    title: title,
+    description: description,
+  };
+}
+
 
 const JobSingleDynamicV1 = ({ params }) => {
   const id = params.id;

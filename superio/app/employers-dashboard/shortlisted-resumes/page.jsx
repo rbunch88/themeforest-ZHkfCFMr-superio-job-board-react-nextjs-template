@@ -2,8 +2,8 @@ import dynamic from "next/dynamic";
 import ShortlistedResumes from "@/components/dashboard-pages/employers-dashboard/shortlisted-resumes";
 
 export const metadata = {
-  title: "Shortlisted Resumes || Superio - Job Borad React NextJS Template",
-  description: "Superio - Job Borad React NextJS Template",
+  title: "Shortlisted Resumes | Employer Dashboard | My ABA Jobs",
+  description: "View and manage candidates you have shortlisted for your job postings on My ABA Jobs.",
 };
 
 const index = () => {

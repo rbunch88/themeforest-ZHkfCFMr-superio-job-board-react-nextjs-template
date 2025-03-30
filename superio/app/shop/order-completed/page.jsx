@@ -2,8 +2,8 @@ import dynamic from "next/dynamic";
 import OrderCompleted from "@/components/shop/order-completed";
 
 export const metadata = {
-  title: "Order Completed || Superio - Job Borad React NextJS Template",
-  description: "Superio - Job Borad React NextJS Template",
+  title: "Order Completed | My ABA Jobs",
+  description: "Thank you for your purchase. Your job posting order has been successfully completed on My ABA Jobs.",
 };
 
 const index = () => {

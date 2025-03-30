@@ -8,11 +8,11 @@ import { addKeyword } from "../../../features/filter/filterSlice";
 const SearchBox = () => {
     const { jobList } = useSelector((state) => state.filter);
     const [getKeyWord, setkeyWord] = useState(jobList.keyword);
-    const dispath = useDispatch();
+    const dispatch = useDispatch();
 
     // keyword handler
     const keywordHandler = (e) => {
-        dispath(addKeyword(e.target.value));
+        dispatch(addKeyword(e.target.value));
     };
 
     useEffect(() => {

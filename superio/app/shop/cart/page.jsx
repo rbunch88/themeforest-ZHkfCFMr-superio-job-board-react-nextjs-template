@@ -2,8 +2,8 @@ import dynamic from "next/dynamic";
 import Cart from "@/components/shop/cart";
 
 export const metadata = {
-  title: "Cart || Superio - Job Borad React NextJS Template",
-  description: "Superio - Job Borad React NextJS Template",
+  title: "Shopping Cart | My ABA Jobs",
+  description: "Review your selected job posting packages before proceeding to checkout on My ABA Jobs.",
 };
 
 const index = () => {

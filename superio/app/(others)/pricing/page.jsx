@@ -3,10 +3,8 @@ import dynamic from "next/dynamic";
 import Pricing from "@/components/pages-menu/pricing";
 
 export const metadata = {
-  title: 'Pricing || Superio - Job Borad React NextJS Template',
-  description:
-    'Superio - Job Borad React NextJS Template',
-  
+  title: "Pricing Plans | My ABA Jobs",
+  description: "Choose the best job posting plan for your hiring needs. View pricing options for single posts and multi-job packages on My ABA Jobs.",
 }
 
 
