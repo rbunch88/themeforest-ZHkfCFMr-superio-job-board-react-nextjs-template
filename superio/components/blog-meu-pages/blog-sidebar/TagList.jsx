@@ -1,20 +1,16 @@
 import Link from "next/link";
 
-const TagList = () => {
-  const tagContent = [
-    "app",
-    "administrative",
-    "android",
-    "wordpress",
-    "design",
-    "react",
-  ];
-
+// Accept tags prop (array of { name: string, slug: string })
+const TagList = ({ tags = [] }) => {
   return (
     <>
-      {tagContent.map((item, i) => (
-        <li key={i}>
-          <Link href="#">{item}</Link>
+      {tags.length === 0 && <li>No tags found.</li>}
+      {tags.map((tag) => (
+        <li key={tag.slug}> {/* Use slug as key */}
+          {/* Link to the blog list page, filtering by tag slug */}
+          <Link href={`/blog-list-v1?tag=${tag.slug}`}>
+            {tag.name}
+          </Link>
         </li>
       ))}
     </>

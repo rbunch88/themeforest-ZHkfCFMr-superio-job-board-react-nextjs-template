@@ -27,11 +27,12 @@ export async function middleware(req) {
   const { pathname } = req.nextUrl;
   const loginUrl = new URL('/login', req.url); // Construct login URL based on request
 
-  // Define protected dashboard paths
-  const employerDashboardPaths = ['/employers-dashboard'];
-  const candidateDashboardPaths = ['/candidates-dashboard'];
-  const protectedPaths = [...employerDashboardPaths, ...candidateDashboardPaths];
-
+  
+    // Define protected dashboard paths
+    const employerDashboardPaths = ['/employers-dashboard', '/candidates-list-v1']; // Added applicant list
+    const candidateDashboardPaths = ['/candidates-dashboard'];
+    // Combine all paths that require *some* login
+    const protectedPaths = [...employerDashboardPaths, ...candidateDashboardPaths];
   // Check if the current path is protected
   const isProtectedPath = protectedPaths.some(path => pathname.startsWith(path));
 

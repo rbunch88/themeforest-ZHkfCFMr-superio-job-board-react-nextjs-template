@@ -1,29 +1,50 @@
 import Social from "../social/Social";
 
-const CompanyInfo = () => {
+// Accept company data as a prop
+const CompanyInfo = ({ company }) => {
+  // Basic check if company data is available
+  if (!company) {
+    return <div className="widget-content">Loading company info...</div>;
+  }
+
   return (
     <ul className="company-info">
-      <li>
-        Primary industry: <span>Software</span>
-      </li>
-      <li>
-        Company size: <span>501-1,000</span>
-      </li>
-      <li>
-        Founded in: <span>2011</span>
-      </li>
-      <li>
-        Phone: <span>123 456 7890</span>
-      </li>
-      <li>
-        Email: <span>info@joio.com</span>
-      </li>
-      <li>
-        Location: <span>London, UK</span>
-      </li>
+      {/* TODO: Fetch and display industry from company table if needed */}
+      {/* {company.industry && (
+        <li>
+          Primary industry: <span>{company.industry}</span>
+        </li>
+      )} */}
+      {company.size && ( // Assuming 'size' field exists in companies table
+        <li>
+          Company size: <span>{company.size}</span>
+        </li>
+      )}
+      {company.founded_year && ( // Assuming 'founded_year' field exists
+        <li>
+          Founded in: <span>{company.founded_year}</span>
+        </li>
+      )}
+      {/* TODO: Add phone and email fields to companies table if needed */}
+      {/* {company.phone && (
+        <li>
+          Phone: <span>{company.phone}</span>
+        </li>
+      )}
+      {company.email && (
+        <li>
+          Email: <span>{company.email}</span>
+        </li>
+      )} */}
+      {company.location && ( // Assuming 'location' field exists (might be headquarters)
+        <li>
+          Location: <span>{company.location}</span>
+        </li>
+      )}
+      {/* TODO: Fetch and display social media links dynamically if stored */}
       <li>
         Social media:
-        <Social />
+        <Social /> {/* Keep static social links for now */}
       </li>
     </ul>
   );

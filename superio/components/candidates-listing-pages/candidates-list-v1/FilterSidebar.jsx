@@ -1,11 +1,11 @@
-import Categories from "../components/Categories";
 import DestinationRangeSlider from "../components/DestinationRangeSlider";
-import CandidatesGender from "../components/CandidatesGender";
+// import CandidatesGender from "../components/CandidatesGender"; // Removed
 import LocationBox from "../components/LocationBox";
 import SearchBox from "../components/SearchBox";
-import DatePosted from "../components/DatePosted";
-import Experience from "../components/Experience";
-import Qualification from "../components/Qualification";
+import DatePosted from "../components/DatePosted"; // Keep this, will filter application_date
+import ExperienceLevel from "../components/ExperienceLevel"; // Changed from Experience
+// import Categories from "../components/Categories"; // Removed
+// import Qualification from "../components/Qualification"; // Removed
 
 const FilterSidebar = () => {
     return (
@@ -33,43 +33,47 @@ const FilterSidebar = () => {
                         <LocationBox />
                     </div>
 
-                    <p>Radius around selected destination</p>
-                    <DestinationRangeSlider />
+                    {/* <p>Radius around selected destination</p>
+                    <DestinationRangeSlider /> */}
+                    {/* Radius filter skipped for now */}
                 </div>
                 {/* <!-- Filter Block --> */}
 
-                <div className="filter-block">
+                {/* Category Filter Removed */}
+                {/* <div className="filter-block">
                     <h4>Category</h4>
                     <div className="form-group">
                         <Categories />
                     </div>
-                </div>
+                </div> */}
                 {/* <!-- Filter Block --> */}
 
-                <div className="filter-block">
+                {/* Gender Filter Removed */}
+                {/* <div className="filter-block">
                     <h4>Candidate Gender</h4>
                     <div className="form-group">
                         <CandidatesGender />
                     </div>
-                </div>
+                </div> */}
                 {/* <!-- Filter Block --> */}
 
                 <div className="checkbox-outer">
-                    <h4>Date Posted</h4>
+                    <h4>Date Applied</h4> {/* Renamed from Date Posted */}
                     <DatePosted />
                 </div>
                 {/* <!-- Filter Block --> */}
 
                 <div className="checkbox-outer">
-                    <h4>Experience</h4>
-                    <Experience />
+                    <h4>Experience Level</h4> {/* Renamed from Experience */}
+                    <ExperienceLevel /> {/* Changed from Experience */}
                 </div>
                 {/* <!-- Filter Block --> */}
 
-                <div className=" checkbox-outer">
+                {/* Qualification Filter Removed */}
+                {/* <div className=" checkbox-outer">
                     <h4>Qualification</h4>
                     <Qualification />
-                </div>
+                </div> */}
                 {/* <!-- Filter Block --> */}
             </div>
             {/* Filter Outer */}

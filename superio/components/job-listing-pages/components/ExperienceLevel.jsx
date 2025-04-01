@@ -2,21 +2,21 @@
 'use client'
 import { useDispatch, useSelector } from "react-redux";
 import { addExperience } from "../../../features/filter/filterSlice";
-import { experienceLavelCheck } from "../../../features/job/jobSlice";
+import { experienceLevelCheck } from "../../../features/job/jobSlice";
 
 const ExperienceLevel = () => {
-    const { experienceLavel } = useSelector((state) => state.job) || {};
+    const { experienceLevel } = useSelector((state) => state.job) || {};
     const dispatch = useDispatch();
 
     // experience handler
     const experienceHandler = (e, id) => {
         dispatch(addExperience(e.target.value));
-        dispatch(experienceLavelCheck(id));
+        dispatch(experienceLevelCheck(id));
     };
 
     return (
         <ul className="switchbox">
-            {experienceLavel?.map((item) => (
+            {experienceLevel?.map((item) => (
                 <li key={item.id}>
                     <label className="switch">
                         <input

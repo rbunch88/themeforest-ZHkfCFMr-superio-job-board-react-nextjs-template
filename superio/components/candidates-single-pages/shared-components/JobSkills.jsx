@@ -1,17 +1,20 @@
-const JobSkills = () => {
-  const skills = [
-    "app",
-    "administrative",
-    "android",
-    "wordpress",
-    "design",
-    "react",
-  ];
+// Accept skills array as a prop
+const JobSkills = ({ skills }) => {
+  // Use the passed skills array, default to empty array if not provided
+  const skillsList = skills || [];
+
+  // Don't render the component if there are no skills
+  if (skillsList.length === 0) {
+    return null;
+  }
+
   return (
     <ul className="job-skills">
-      {skills.map((skill, i) => (
+      {skillsList.map((skill, i) => (
         <li key={i}>
-          <a href="#">{skill}</a>
+          {/* Link might not be necessary here, could just be text */}
+          {/* <a href="#">{skill}</a> */}
+           <span>{skill}</span>
         </li>
       ))}
     </ul>

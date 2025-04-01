@@ -76,7 +76,8 @@ const FilterJobsBox = () => {
             salary_min,
             salary_max,
             salary_unit,
-            company:companies ( name, logo_url )
+            company:companies ( name, logo_url ),
+            job_type:job_types ( name ) // Fetch job type name
           `, { count: 'exact' }) // Request count for pagination
           .eq('status', 'active'); // Only fetch active jobs
 
@@ -205,9 +206,10 @@ const FilterJobsBox = () => {
           salary_min,
           salary_max,
           salary_unit,
-          company:companies ( name, logo_url )
-        `) // No count needed for subsequent fetches
-        .eq('status', 'active');
+          company:companies ( name, logo_url ),
+          job_type:job_types ( name ) // Fetch job type name
+      `) // No count needed for subsequent fetches
+      .eq('status', 'active');
 
       // --- Apply Filters (Mirroring useEffect logic) ---
       if (keyword) {
@@ -317,8 +319,10 @@ const FilterJobsBox = () => {
              </ul>
 
              <ul className="job-other-info">
-               {/* TODO: Fetch and display job type name based on item.job_type_id */}
-               {/* Example placeholder: <li className="time">Full Time</li> */}
+               {item.job_type?.name && (
+                 <li className="time">{item.job_type.name}</li>
+               )}
+               {/* Add other info like experience level if needed */}
              </ul>
            </div>
          </div>

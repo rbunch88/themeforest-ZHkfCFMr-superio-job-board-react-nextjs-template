@@ -1,4 +1,5 @@
 import CallToActions from "../components/CallToActions";
+import Categories from "../components/Categories"; // Corrected import name and path
 import DatePosted from "../components/DatePosted";
 import ExperienceLevel from "../components/ExperienceLevel";
 import JobType from "../components/JobType";
@@ -22,6 +23,13 @@ const FilterSidebar = () => {
                     <JobType />
                 </div>
                 {/* <!-- Switchbox Outer --> */}
+
+
+                <div className="checkbox-outer">
+                    <h4>Category</h4>
+                    <Categories />
+                </div>
+                {/* <!-- Checkboxes Ouer --> */}
 
                 <div className="checkbox-outer">
                     <h4>Date Posted</h4>

@@ -6,6 +6,7 @@ import MyProfile from "./components/my-profile";
 import SocialNetworkBox from "./components/SocialNetworkBox";
 import ContactInfoBox from "./components/ContactInfoBox";
 import CopyrightFooter from "../../CopyrightFooter";
+import MyCertifications from "./components/MyCertifications"; // Import the new component
 import DashboardCandidatesHeader from "../../../header/DashboardCandidatesHeader";
 import MenuToggler from "../../MenuToggler";
 
@@ -74,6 +75,11 @@ const index = () => {
                 </div>
               </div>
               {/* <!-- Ls widget --> */}
+
+              {/* <!-- Ls widget --> */}
+              <MyCertifications />
+              {/* <!-- Ls widget --> */}
+
             </div>
           </div>
           {/* End .row */}

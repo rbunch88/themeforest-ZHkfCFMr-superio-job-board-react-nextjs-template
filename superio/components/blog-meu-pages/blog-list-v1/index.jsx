@@ -7,7 +7,8 @@ import BlogPagination from "../blog-sidebar/BlogPagination";
 import BlogSidebar from "../blog-sidebar";
 import Breadcrumb from "../../common/Breadcrumb";
 
-const index = () => {
+// Accept posts and pagination info as props
+const BlogList = ({ posts, currentPage, totalPages }) => {
   return (
     <>
       {/* <!-- Header Span --> */}
@@ -31,11 +32,13 @@ const index = () => {
             <div className="content-side col-lg-8 col-md-12 col-sm-12">
               <div className="blog-grid">
                 <div className="row">
-                  <Blog6 />
+                  {/* Pass posts data to the component that renders the grid */}
+                  <Blog6 posts={posts} />
                 </div>
                 {/* End .row */}
 
-                <BlogPagination />
+                {/* Pass pagination data to the pagination component */}
+                <BlogPagination currentPage={currentPage} totalPages={totalPages} />
                 {/* End blog pagination */}
               </div>
               {/* End blog-grid */}
@@ -43,6 +46,7 @@ const index = () => {
             {/* <!--End Content Side--> */}
 
             <div className="sidebar-side col-lg-4 col-md-12 col-sm-12">
+              {/* Sidebar might also need data fetching later */}
               <BlogSidebar />
             </div>
             {/* <!--End Sidebar Side--> */}
@@ -58,4 +62,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default BlogList;

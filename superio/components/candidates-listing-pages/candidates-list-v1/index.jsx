@@ -1,3 +1,10 @@
+'use client' // Make it a client component
+
+import { useEffect } from "react"; // Import useEffect
+import { useDispatch } from "react-redux"; // Import useDispatch
+import { supabase } from "../../../utils/supabaseClient"; // Import supabase client
+import { setExperienceLevels } from "../../../features/candidate/candidateSlice"; // Import action
+
 import FooterDefault from "../../footer/common-footer";
 import Breadcrumb from "../../common/Breadcrumb";
 import LoginPopup from "../../common/form/login/LoginPopup";
@@ -7,6 +14,32 @@ import FilterTopBox from "./FilterTopBox";
 import FilterSidebar from "./FilterSidebar";
 
 const Index = () => {
+    const dispatch = useDispatch();
+
+    // Fetch experience levels on mount
+    useEffect(() => {
+        const fetchExperienceLevels = async () => {
+            if (!supabase) {
+                console.error('Supabase client not available');
+                return;
+            }
+            try {
+                const { data, error } = await supabase
+                    .from('experience_levels')
+                    .select('id, name')
+                    .order('name', { ascending: true }); // Or a more logical order if needed
+
+                if (error) throw error;
+
+                dispatch(setExperienceLevels(data || []));
+            } catch (error) {
+                console.error("Error fetching experience levels:", error);
+            }
+        };
+
+        fetchExperienceLevels();
+    }, [dispatch]); // Dependency array includes dispatch
+
     return (
         <>
             {/* <!-- Header Span --> */}
@@ -21,7 +54,7 @@ const Index = () => {
             <MobileMenu />
             {/* End MobileMenu */}
 
-            <Breadcrumb title="Candidates" meta="Candidates" />
+            <Breadcrumb title="Applicants" meta="Applicants" /> {/* Changed title */}
             {/* <!--End Breadcrumb Start--> */}
 
             <section className="ls-section">
