@@ -558,4 +558,22 @@ This document contains instructions for tasks that need to be performed outside 
     EXECUTE FUNCTION public.handle_blog_post_slug();
     ```
 
+### 11. Remove Faulty Job Triggers (Fix for Seeding Errors)
+
+*   **Reason:** The `set_job_identifier` trigger/function caused the `record "new" has no field "identifier"` error. The `validate_job_posting` trigger/function caused the `record "new" has no field "job_location_type"` error. Both reference non-existent columns and are potentially redundant or need revision based on the current schema. Removing them unblocks seeding.
+*   **Action:** Run the following SQL commands in your Supabase SQL Editor to remove these triggers and their associated functions:
+    ```sql
+    -- Drop the faulty identifier trigger from the jobs table
+    DROP TRIGGER IF EXISTS set_job_identifier ON public.jobs;
+
+    -- Drop the associated identifier function
+    DROP FUNCTION IF EXISTS public.generate_job_identifier();
+
+    -- Drop the faulty validation trigger from the jobs table (Handles both INSERT and UPDATE)
+    DROP TRIGGER IF EXISTS validate_job_posting ON public.jobs;
+
+    -- Drop the associated validation function
+    DROP FUNCTION IF EXISTS public.validate_job_posting();
+    ```
+
 *(Add other external setup steps here as needed, e.g., Stripe/PayPal setup, Vercel configuration)*
