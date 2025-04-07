@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 import { notFound } from 'next/navigation';
-import { supabase } from "@/utils/supabaseClient"; // Adjust path if needed
+import { cookies } from 'next/headers';
+import { createClient } from '@/utils/supabase/server'; // Use the server client utility
 
 // import employersInfo from "@/data/topCompany"; // Removed static import
 import LoginPopup from "@/components/common/form/login/LoginPopup";
@@ -15,11 +16,7 @@ import PrivateMessageBox from "@/components/employer-single-pages/shared-compone
 import Image from "next/image";
 
 // Helper function to fetch employer data
-async function getEmployerData(short_id) { // Updated function signature
-  if (!supabase) {
-    console.error("Supabase client not available for fetching employer data.");
-    return null;
-  }
+async function getEmployerData(short_id, supabase) { // Updated function signature
   // Fetch company and count of their active jobs
   const { data: employerData, error } = await supabase
     .from('companies')
@@ -69,9 +66,11 @@ export async function generateMetadata({ params }) {
 
   if (!short_id) {
       return { title: "Invalid Employer URL", description: "The employer URL is not valid." };
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
   }
 
-  const employer = await getEmployerData(short_id);
+  const employer = await getEmployerData(short_id, supabase);
 
   if (!employer) {
     return {
@@ -97,9 +96,11 @@ const EmployersSingleV2 = async ({ params }) => {
 
   if (!short_id) {
       notFound(); // Handle invalid URL
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
   }
 
-  const employer = await getEmployerData(short_id);
+  const employer = await getEmployerData(short_id, supabase);
 
   // If employer not found, render the 404 page
   if (!employer) {
@@ -197,7 +198,7 @@ const EmployersSingleV2 = async ({ params }) => {
                           <Image
                             width={60}
                             height={60}
-                            src={employer.img || "/images/resource/default-logo.png"} // Use fetched logo
+                            src={employer.img || "/images/resource/company-logo/company_logo_placeholder.png"} // Use fetched logo
                             alt={`${employer.name} logo`}
                           />
                         </span>
