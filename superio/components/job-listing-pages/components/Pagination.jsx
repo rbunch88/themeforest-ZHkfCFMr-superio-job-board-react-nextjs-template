@@ -1,18 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 
-const Pagination = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
   const handlePrevClick = () => {
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+    if (currentPage > 1) {
+      onPageChange(currentPage - 1);
+    }
   };
 
   const handleNextClick = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
+    if (currentPage < totalPages) {
+      onPageChange(currentPage + 1);
+    }
   };
 
   const renderPaginationItems = () => {
-    const totalPages = 3; // Change this to the actual total number of pages
+    // Use totalPages prop
     const items = [];
 
     for (let page = 1; page <= totalPages; page++) {
@@ -21,7 +24,7 @@ const Pagination = () => {
 
       items.push(
         <li key={page}>
-          <span className={className} onClick={() => setCurrentPage(page)}>
+          <span className={className} onClick={() => onPageChange(page)}>
             {page}
           </span>
         </li>
@@ -35,15 +38,19 @@ const Pagination = () => {
     <nav className="ls-pagination">
       <ul>
         <li className="prev">
-          <span onClick={handlePrevClick}>
-            <i className="fa fa-arrow-left"></i>
-          </span>
+          {currentPage > 1 && ( // Only show if not on first page
+            <span onClick={handlePrevClick}>
+              <i className="fa fa-arrow-left"></i>
+            </span>
+          )}
         </li>
         {renderPaginationItems()}
         <li className="next">
-          <span onClick={handleNextClick}>
-            <i className="fa fa-arrow-right"></i>
-          </span>
+          {currentPage < totalPages && ( // Only show if not on last page
+            <span onClick={handleNextClick}>
+              <i className="fa fa-arrow-right"></i>
+            </span>
+          )}
         </li>
       </ul>
     </nav>

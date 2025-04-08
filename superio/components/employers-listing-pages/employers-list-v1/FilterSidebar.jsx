@@ -1,12 +1,14 @@
-import CallToActions from "../components/CallToActions";
-import Categories from "../components/Categories";
-import DestinationRangeSlider from "../components/DestinationRangeSlider";
-import CompanySize from "../components/CompanySize";
-import LocationBox from "../components/LocationBox";
-import FoundationDate from "../components/FoundationDate";
-import SearchBox from "../components/SearchBox";
+'use client' // Make this a client component to use hooks in children
 
-const FilterSidebar = () => {
+import CallToActions from "../components/CallToActions";
+// import Categories from "../components/Categories"; // Removed - Not implemented for companies
+// import DestinationRangeSlider from "../components/DestinationRangeSlider"; // Removed - Not implemented for companies
+// import CompanySize from "../components/CompanySize"; // Removed - Commented out previously
+import LocationBox from "../components/LocationBox"; // Keep - Needs refactoring
+import FoundationDate from "../components/FoundationDate"; // Keep - Needs refactoring
+import SearchBox from "../components/SearchBox"; // Keep - Needs refactoring
+
+const FilterSidebar = ({ searchParams }) => { // Accept searchParams prop
     return (
         <div className="inner-column pd-right">
             <div className="filters-outer">
@@ -21,7 +23,8 @@ const FilterSidebar = () => {
                 <div className="filter-block">
                     <h4>Search by Keywords</h4>
                     <div className="form-group">
-                        <SearchBox />
+                        {/* Pass searchParams down */}
+                        <SearchBox searchParams={searchParams} />
                     </div>
                 </div>
                 {/* <!-- Filter Block --> */}
@@ -29,34 +32,31 @@ const FilterSidebar = () => {
                 <div className="filter-block">
                     <h4>Location</h4>
                     <div className="form-group">
-                        <LocationBox />
+                         {/* Pass searchParams down */}
+                        <LocationBox searchParams={searchParams} />
                     </div>
 
-                    <p>Radius around selected destination</p>
-                    <DestinationRangeSlider />
+                    {/* Removed Destination/Radius Slider */}
+                    {/* <p>Radius around selected destination</p>
+                    <DestinationRangeSlider /> */}
                 </div>
                 {/* <!-- Filter Block --> */}
 
-                <div className="filter-block">
+                {/* Removed Category Filter */}
+                {/* <div className="filter-block">
                     <h4>Category</h4>
                     <div className="form-group">
                         <Categories />
                     </div>
-                </div>
-                {/* <!-- Filter Block --> */}
-
-                {/* <div className="filter-block">
-                    <h4>Compnay Size</h4>
-                    <div className="form-group">
-                        <CompanySize />
-                    </div>
                 </div> */}
                 {/* <!-- Filter Block --> */}
 
+                {/* Removed Company Size Filter (was already commented out) */}
+
                 <div className="filter-block">
                     <h4>Foundation Date</h4>
-
-                    <FoundationDate />
+                     {/* Pass searchParams down */}
+                    <FoundationDate searchParams={searchParams} />
                 </div>
                 {/* <!-- Filter Block --> */}
             </div>

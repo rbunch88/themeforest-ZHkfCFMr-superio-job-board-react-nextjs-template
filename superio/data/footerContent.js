@@ -1,10 +1,10 @@
 // Placeholder routes used where specific pages don't exist yet
-module.exports = [
+export default [
   {
     id: 1,
     title: "For Job Seekers", // Updated Title
     menuList: [
-      { name: "Find ABA Jobs", route: "/job-list-v2" }, // Corrected link
+      { name: "Find ABA Jobs", route: "/jobs" }, // Corrected link
       { name: "Career Growth Resources", route: "#" }, // Placeholder
       { name: "Resume Tips for ABA Pros", route: "#" }, // Placeholder
       { name: "Candidate Dashboard", route: "/candidates-dashboard/dashboard" }, // Kept from original
@@ -26,7 +26,7 @@ module.exports = [
     menuList: [
       { name: "Our Commitment", route: "/about" }, // Renamed About Us
       { name: "Contact Support", route: "/contact" }, // Renamed Contact
-      { name: "Blog", route: "/blog-list-v1" }, // Kept
+      { name: "Blog", route: "/blog" }, // Kept
     ],
   },
   // Removed original "Helpful Resources" section

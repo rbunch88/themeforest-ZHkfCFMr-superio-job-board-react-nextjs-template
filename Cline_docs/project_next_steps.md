@@ -2,51 +2,52 @@
 
 ---
 
-## Phase 1: Fix `/job-list-v2` Bug
+## Phase 1: Fix Initial Load Errors & Conflicts (Completed)
 
-- Diagnose why "No jobs found" appears:
-  - Review Supabase query in `FilterJobsBox.jsx`.
-  - Check browser console for fetch errors or incorrect API calls.
-  - Confirm seeded jobs exist in Supabase and match query filters.
-  - Add console logs or use React DevTools to trace data flow.
-  - Adjust query filters or component logic as needed.
-  - Verify job data renders correctly once fixed.
+- **Dependency Conflict:** Replaced `react-input-range` with `react-range`.
+- **Supabase SSR Setup:** Refactored middleware, client/server utilities, environment variables, and component imports to align with `@supabase/ssr` documentation and fix client creation errors.
+- **`/employers` Page Errors:** Fixed Supabase query syntax, refactored filter components (`SearchBox`, `LocationBox`, `FoundationDate`) to use `useSearchParams`, and resolved NaN display issue.
+- **`/blog` Page Errors:** Fixed Supabase client creation/import issues.
 
 **Status: Completed**
 
-*   **Summary:** Fixed the "No jobs found" bug by correcting the salary filter logic and tag filtering in `FilterJobsBox.jsx`. Added comprehensive debugging logs.
+*   **Summary:** Resolved critical dependency conflicts and Supabase SSR setup errors that were preventing the `/employers` and `/blog` pages from loading. Fixed subsequent client-side errors on the `/employers` page.
 
 ---
 
-## Phase 2: Unblock Testing
+## Phase 2: Fix Remaining Page Errors & Unblock Testing
 
-**Note:** With the `/job-list-v2` bug fixed, manual testing can now proceed.
+**Note:** With `/employers` and `/blog` pages loading, testing is partially unblocked. The primary remaining blocker is the `/job/[slug]` page error.
 
+- **Debug `/job/[slug]` Error:**
+    - Investigate and fix the `id is not defined` error preventing `/job/[slug]` pages from loading (likely needs code update in `app/(job)/job/[slug]/page.jsx` to use `params.slug` instead of parsing `short_id` from a combined param).
 - **Automated Testing:**
-  - Investigate Puppeteer "detached Frame" errors.
-  - If unresolved quickly, **switch to manual testing**.
-- **Manual Testing:**
-  - Test all public routes:
-    - `/job-list-v2` (Jobs)
-    - `/employers-list-v1` (Employers)
-    - `/blog-list-v1` (Blog)
-    - Single Job, Employer, Blog pages
-  - After authentication is verified, test protected routes:
-    - `/candidates-list-v1` (Applicants)
-    - Dashboards
-  - Document any broken links, missing data, or UI issues.
+    - Investigate Puppeteer "detached Frame" errors once all pages load.
+    - If unresolved quickly, **switch to manual testing**.
+- **Manual Testing (Post `/job/[slug]` Fix):**
+    - Test all public routes:
+        - `/job-list-v2` (Jobs) - *Verify pagination fix*
+        - `/employers-list-v1` (Employers) - *Verify page load & filters*
+        - `/blog-list-v1` (Blog) - *Verify page load*
+        - Single Job (`/job/[slug]`) - *Verify page load*
+        - Single Employer (`/employers-single-v2/[slug]-[short_id]`)
+        - Single Blog (`/blog-details/[slug]`)
+    - After authentication is verified, test protected routes:
+        - `/candidates-list-v1` (Applicants)
+        - Dashboards
+    - Document any broken links, missing data, or UI issues.
 
 ---
 
 ## Phase 3: Finalize Authentication
 
 - **Verify:**
-  - Sign up, login, logout flows.
-  - Role-based redirects (candidate vs employer).
-  - Middleware protections for dashboards and applicant list.
+    - Sign up, login, logout flows.
+    - Role-based redirects (candidate vs employer).
+    - Middleware protections for dashboards and applicant list.
 - **Test:**
-  - Candidate dashboard: profile update, certifications, resume upload.
-  - Employer dashboard: post job, view applicants.
+    - Candidate dashboard: profile update, certifications, resume upload.
+    - Employer dashboard: post job, view applicants.
 
 ---
 
@@ -54,9 +55,9 @@
 
 - **Choose:** Stripe or PayPal (or both).
 - **Implement:**
-  - Employer payment flow for job postings.
-  - Pricing page updates.
-  - Webhook handling for payment status.
+    - Employer payment flow for job postings.
+    - Pricing page updates.
+    - Webhook handling for payment status.
 - **Test:** End-to-end payment and job posting unlock.
 
 ---
@@ -72,9 +73,9 @@
 ## Phase 6: Finalize Frontend
 
 - **Complete:**
-  - Work history display on candidate profiles.
-  - Any missing filters or UI components.
-  - Polish UI/UX, fix minor bugs.
+    - Work history display on candidate profiles.
+    - Any missing filters or UI components.
+    - Polish UI/UX, fix minor bugs found during testing.
 - **Verify:** All links, data displays, and forms work as expected.
 
 ---
@@ -91,20 +92,20 @@
 
 ```mermaid
 graph TD
-    A[Fix /job-list-v2 Bug] --> B[Unblock Testing]
-    B --> C[Manual Testing of Routing]
+    A[Fix Initial Load Errors (SSR, Dep, /employers)] --> B[Fix /job/[slug] Error]
+    B --> C[Manual Testing (Public Routes)]
     C --> D[Finalize Authentication]
-    D --> E[Payment Integration]
-    E --> F[Content Migration]
-    F --> G[Finalize Frontend Components]
-    G --> H[Deployment & Launch]
+    D --> E[Manual Testing (Auth Routes)]
+    E --> F[Payment Integration]
+    F --> G[Content Migration]
+    G --> H[Finalize Frontend Components]
+    H --> I[Deployment & Launch]
 
     subgraph Blockers
-        A
         B
     end
 
-    style A fill:#f99,stroke:#333,stroke-width:2px
+    style A fill:#9f9,stroke:#333,stroke-width:1px
     style B fill:#f99,stroke:#333,stroke-width:2px
 ```
 
@@ -113,18 +114,15 @@ graph TD
 ## Summary
 
 - Backend is largely complete and well-structured.
-- Frontend is mostly integrated but blocked by a key bug and testing issues.
-- Immediate priority: **fix `/job-list-v2` bug**.
-- Then, **unblock testing** (manual if needed).
-- After that, **finalize authentication**, **integrate payments**, **migrate content**, **polish frontend**, and **deploy**.
+- Initial critical frontend blockers (dependency conflict, Supabase SSR setup, `/employers` page errors) have been resolved.
+- Immediate priority: **fix `/job/[slug]` page load error**.
+- Then, **proceed with manual testing**, **finalize authentication**, **integrate payments**, **migrate content**, **polish frontend**, and **deploy**.
 
+---
 
-## Testing Instructions
+## Testing Instructions (Next Steps)
 
-To verify the fix for Phase 1:
-
-1.  Run the development server: `cd superio && npm run dev`
-2.  Navigate to `/job-list-v2` in your browser.
-3.  Verify that jobs are now displayed correctly.
-4.  Check the browser console for debugging logs to ensure the query is working as expected.
-5.  Test different filter combinations (salary, tags, etc.) to ensure they function correctly.
+1.  Fix the `/job/[slug]` page error.
+2.  Run the development server: `cd superio && npm run dev`
+3.  Navigate through all public pages (`/`, `/job-list-v2`, `/employers-list-v1`, `/blog-list-v1`, sample single pages for each type) and verify they load without critical errors. Check console for errors.
+4.  Test basic functionality on list pages (filters, sorting, pagination).

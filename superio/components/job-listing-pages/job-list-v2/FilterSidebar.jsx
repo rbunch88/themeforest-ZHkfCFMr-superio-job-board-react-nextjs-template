@@ -3,7 +3,6 @@ import Categories from "../components/Categories"; // Corrected import name and 
 import DatePosted from "../components/DatePosted";
 import ExperienceLevel from "../components/ExperienceLevel";
 import JobType from "../components/JobType";
-import SalaryRangeSlider from "../components/SalaryRangeSlider";
 import Tag from "../components/Tag";
 
 const FilterSidebar = () => {
@@ -43,12 +42,7 @@ const FilterSidebar = () => {
                 </div>
                 {/* <!-- Checkboxes Ouer --> */}
 
-                <div className="filter-block">
-                    <h4>Salary</h4>
-
-                    <SalaryRangeSlider />
-                </div>
-                {/* <!-- Filter Block --> */}
+                {/* <!-- Salary Filter Block Removed --> */}
 
                 <div className="filter-block">
                     <h4>Tags</h4>

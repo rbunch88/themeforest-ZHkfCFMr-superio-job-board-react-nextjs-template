@@ -2,7 +2,7 @@
 
 import { useEffect } from "react"; // Import useEffect
 import { useDispatch } from "react-redux"; // Import useDispatch
-import { supabase } from "../../../utils/supabaseClient"; // Import supabase client
+import { createClient } from "../../../utils/supabase/client.js"; // Import createClient function
 import { setJobTypes, setExperienceLevels, setTags } from "../../../features/job/jobSlice"; // Import new actions
 
 import FooterDefault from "../../../components/footer/common-footer";
@@ -14,13 +14,22 @@ import JobSearchForm from "./JobSearchForm";
 import FilterSidebar from "./FilterSidebar";
 
 const Index = () => { // Renamed component to avoid conflict with 'index' import if any
+  const supabase = createClient(); // Instantiate the client
+
+  if (!supabase) {
+    console.error("Failed to initialize Supabase client in component. Check environment variables.");
+    // Render an error message or return null if the client can't be created
+    return <div>Error: Could not connect to the database service.</div>;
+  }
+
   const dispatch = useDispatch();
 
   // Fetch filter options data on component mount
   useEffect(() => {
     const fetchFilterOptions = async () => {
       if (!supabase) {
-        console.error('Supabase client not available');
+        console.error("Failed to initialize Supabase client. Check environment variables.");
+        // Cannot return JSX here, just stop the fetch
         return;
       }
 

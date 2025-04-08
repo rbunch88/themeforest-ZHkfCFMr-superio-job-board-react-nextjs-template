@@ -4,7 +4,7 @@ import Link from "next/link";
 import LoginWithSocial from "./LoginWithSocial";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter
-import { supabase } from '../../../../utils/supabaseClient'; // Import Supabase client
+import { createClient } from '@/utils/supabase/client'; // Import from the new client utility
 
 const FormContent2 = () => {
   const [email, setEmail] = useState('');
@@ -12,14 +12,16 @@ const FormContent2 = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const router = useRouter(); // Initialize router
+  const supabase = createClient(); // Initialize client here
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
     setError(null);
 
+    // Check if client was initialized (it might be null if env vars are missing)
     if (!supabase) {
-      setError('Supabase client not initialized.');
+      setError('Supabase client is not available. Check environment variables.');
       setLoading(false);
       return;
     }
@@ -101,6 +103,7 @@ const FormContent2 = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={loading}
+            autoComplete="current-password"
           />
         </div>
         {/* password */}

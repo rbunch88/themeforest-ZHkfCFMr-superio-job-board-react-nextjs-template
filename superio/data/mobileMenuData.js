@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   {
     id: 1,
     label: "Home",
@@ -7,22 +7,22 @@ module.exports = [
   {
     id: 2,
     label: "Browse Jobs",
-    routePath: "/job-list-v2",
+    routePath: "/jobs",
   },
   {
     id: 3,
     label: "Employers",
-    routePath: "/employers-list-v1",
+    routePath: "/employers",
   },
   {
     id: 4,
     label: "Candidates",
-    routePath: "/candidates-list-v1",
+    routePath: "/candidates",
   },
   {
     id: 5,
     label: "Blog",
-    routePath: "/blog-list-v1",
+    routePath: "/blog",
   },
   {
     id: 6,

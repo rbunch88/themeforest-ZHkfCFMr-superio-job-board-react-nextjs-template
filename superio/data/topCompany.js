@@ -1,4 +1,4 @@
-module.exports = [
+export default [
     {
         id: 1,
         img: "/images/resource/company-1.png",

@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation'; // To preserve other query params
 

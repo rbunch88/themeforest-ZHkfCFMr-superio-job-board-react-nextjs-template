@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { supabase } from "@/utils/supabaseClient"; // Adjust path if needed
+import { supabase } from "@/utils/supabase/client"; // Adjust path if needed
 
 const RelatedJobs = ({ employerId }) => { // Accept employerId as prop
   const [relatedJobs, setRelatedJobs] = useState([]);
@@ -96,7 +96,7 @@ const RelatedJobs = ({ employerId }) => { // Accept employerId as prop
                 <Image
                   width={50}
                   height={49}
-                  src={item.companyLogo || "/images/resource/default-logo.png"}
+                  src={item.companyLogo || "/images/resource/company-logo/company_logo_placeholder.png"}
                   alt={`${item.companyName} logo`}
                 />
               </span>

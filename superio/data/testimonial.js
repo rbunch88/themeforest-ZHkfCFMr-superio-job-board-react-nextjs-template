@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   {
     id: 1,
     feedback: "Good theme",

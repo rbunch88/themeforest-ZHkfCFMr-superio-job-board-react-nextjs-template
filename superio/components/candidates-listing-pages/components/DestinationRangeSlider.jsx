@@ -2,41 +2,79 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import InputRange from "react-input-range";
+import { Range, getTrackBackground } from "react-range"; // Import react-range
 import { useDispatch, useSelector } from "react-redux";
 import { addDestination } from "../../../features/filter/candidateFilterSlice";
 
 const DestinationRangeSlider = () => {
     const { destination } = useSelector((state) => state.candidateFilter);
-    const [getDestination, setDestination] = useState({
-        min: destination.min,
-        max: destination.max,
-    });
+    // Adapt state for react-range (uses an array [min, max])
+    const [values, setValues] = useState([destination.min, destination.max]);
 
     const dispatch = useDispatch();
 
     // destination handler
-    const handleOnChange = (value) => {
-        dispatch(addDestination(value));
+    // Adapt handler for react-range (passes array)
+    const handleOnChange = (newValues) => {
+        // Update local state immediately for responsiveness
+        setValues(newValues);
+        // Dispatch the change (consider debouncing if performance is an issue)
+        dispatch(addDestination({ min: newValues[0], max: newValues[1] }));
     };
 
     // destination dispatch
     useEffect(() => {
-        setDestination(destination);
-    });
+        // Update state if Redux store changes
+        // Note: Original useEffect had no dependency array, which is usually incorrect.
+        // Adding dependencies based on similar components. Review if this logic is correct.
+        setValues([destination.min, destination.max]);
+    }, [destination.min, destination.max]);
 
     return (
         <div className="range-slider-one">
-            <InputRange
-                formatLabel={(value) => ``}
-                minValue={0}
-                maxValue={100}
-                value={getDestination}
-                onChange={(value) => handleOnChange(value)}
+            <Range
+                step={1}
+                min={0}
+                max={100}
+                values={values}
+                onChange={(newValues) => handleOnChange(newValues)}
+                renderTrack={({ props, children }) => (
+                    <div
+                        {...props}
+                        style={{
+                            ...props.style,
+                            height: '6px',
+                            width: '100%',
+                            background: getTrackBackground({
+                                values: values,
+                                colors: ['#ccc', '#007bff', '#ccc'], // Adjust colors as needed
+                                min: 0,
+                                max: 100
+                            }),
+                            borderRadius: '4px'
+                        }}
+                    >
+                        {children}
+                    </div>
+                )}
+                renderThumb={({ props }) => (
+                    <div
+                        {...props}
+                        style={{
+                            ...props.style,
+                            height: '18px',
+                            width: '18px',
+                            backgroundColor: '#007bff', // Adjust thumb color
+                            borderRadius: '50%',
+                            boxShadow: '0px 2px 6px #AAA'
+                        }}
+                    />
+                )}
             />
             <div className="input-outer">
                 <div className="amount-outer">
-                    <span className="area-amount">{getDestination.max}</span>
+                    {/* Display the max value from the state array */}
+                    <span className="area-amount">{values[1]}</span>
                     km
                 </div>
             </div>

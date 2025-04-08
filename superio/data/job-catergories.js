@@ -1,5 +1,5 @@
 // Placeholder icons and job numbers used
-module.exports = [
+export default [
   {
     id: 1,
     icon: "flaticon-briefcase", // Placeholder icon

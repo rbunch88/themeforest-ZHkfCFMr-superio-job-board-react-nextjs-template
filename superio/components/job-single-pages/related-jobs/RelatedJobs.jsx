@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { supabase } from "@/utils/supabaseClient"; // Adjust path if needed
+import { createClient } from "@/utils/supabase/client"; // Use the new client utility
 
 const RelatedJobs = ({ job }) => { // Accept current job as prop
   const [relatedJobs, setRelatedJobs] = useState([]);
@@ -17,12 +17,8 @@ const RelatedJobs = ({ job }) => { // Accept current job as prop
         setLoading(false);
         return; // Cannot fetch related jobs without criteria
       }
-      if (!supabase) {
-         console.error("Supabase client not available for related jobs.");
-         setLoading(false);
-         return;
-      }
 
+      const supabase = createClient(); // Instantiate the client here
       setLoading(true);
       setError(null);
 
@@ -86,7 +82,7 @@ const RelatedJobs = ({ job }) => { // Accept current job as prop
     };
 
     fetchRelatedJobs();
-  }, [job, supabase]); // Re-fetch if the main job changes
+  }, [job]); // Re-fetch if the main job changes, supabase client is created inside effect
 
   if (loading) {
     return <div>Loading related jobs...</div>;
@@ -110,7 +106,7 @@ const RelatedJobs = ({ job }) => { // Accept current job as prop
                 <Image
                   width={50}
                   height={49}
-                  src={item.companyLogo || "/images/resource/default-logo.png"}
+                  src={item.companyLogo || "/images/resource/company-logo/company_logo_placeholder.png"}
                   alt={`${item.companyName || 'Company'} logo`}
                 />
               </span>

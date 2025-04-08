@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { createServerClient } from "@/utils/supabaseClient"; // To get public URL for images
+import { createClient } from '@supabase/supabase-js'; // Use basic client for public URLs
 import { format } from 'date-fns'; // For date formatting
 
 // Helper function to format date
@@ -15,7 +15,10 @@ const formatDate = (dateString) => {
 };
 
 const Blog6 = ({ posts = [] }) => { // Accept posts prop, default to empty array
-  const supabase = createServerClient(); // Get Supabase client instance
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ); // Get Supabase client instance
 
   // Function to get public URL safely
   const getImageUrl = (path) => {

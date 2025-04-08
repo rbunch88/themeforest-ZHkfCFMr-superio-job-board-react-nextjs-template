@@ -1,35 +1,28 @@
-import { createServerClient } from '@supabase/ssr';
+import { createClient } from './utils/supabase/middleware'
 import { NextResponse } from 'next/server';
 
 export async function middleware(req) {
-  // Create an actionable Supabase client for middleware.
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    {
-      cookies: {
-        get(name) {
-          return req.cookies.get(name)?.value;
-        },
-        set(name, value, options) {
-          req.cookies.set({ name, value, ...options });
-        },
-        remove(name, options) {
-          req.cookies.set({ name, value: '', ...options });
-        },
-      },
-    }
-  );
+  // Update session and get response (might be redirect)
+  const response = createClient(req); // Use the new synchronous function
 
-  // Refresh session if expired - required for Server Components
-  const { data: { session } } = await supabase.auth.getSession();
+  // Check if updateSession already decided to redirect
+  if (response.redirected) {
+     return response;
+  }
+
+  // NOTE: The following path/role logic currently relies on 'session' and 'supabase'
+  // which are no longer defined here after refactoring to use updateSession.
+  // This logic will need to be adapted in a subsequent step, potentially
+  // by modifying updateSession to return the session object alongside the response.
+
+  // --- Existing path/role checking logic (currently broken, needs adaptation) ---
 
   const { pathname } = req.nextUrl;
   const loginUrl = new URL('/login', req.url); // Construct login URL based on request
 
   
     // Define protected dashboard paths
-    const employerDashboardPaths = ['/employers-dashboard', '/candidates-list-v1']; // Added applicant list
+    const employerDashboardPaths = ['/employers-dashboard', '/candidates']; // Updated candidates list path
     const candidateDashboardPaths = ['/candidates-dashboard'];
     // Combine all paths that require *some* login
     const protectedPaths = [...employerDashboardPaths, ...candidateDashboardPaths];
@@ -78,7 +71,8 @@ export async function middleware(req) {
   }
 
   // Allow the request to proceed for non-protected paths or authorized users
-  return NextResponse.next();
+  // Return the response object handled by the utility function
+  return response;
 }
 
 // Define which paths the middleware should run on

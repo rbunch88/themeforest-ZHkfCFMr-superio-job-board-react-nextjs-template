@@ -1,17 +1,21 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addCategory } from "../../../features/filter/filterSlice";
-import { supabase } from "../../../utils/supabaseClient"; // Import supabase client
+import { useRouter, useSearchParams } from 'next/navigation';
+import { createClient } from "@/utils/supabase/client"; // Import from new client utility
+
+// Removed Redux imports
 
 const Categories = () => {
-    const { jobList } = useSelector((state) => state.filter) || {};
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const supabase = createClient(); // Initialize new client
+
+    const currentCategory = searchParams.get('category') || ""; // Get current category from URL
+
     const [categories, setCategories] = useState([]); // State for fetched categories
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    const dispatch = useDispatch();
 
     // Fetch categories from Supabase on component mount
     useEffect(() => {
@@ -24,10 +28,11 @@ const Categories = () => {
                 return;
             }
             try {
+                // Fetch categories including their slugs
                 const { data, error: fetchError } = await supabase
                     .from('job_categories')
                     .select('id, name')
-                    .order('name', { ascending: true }); // Order alphabetically
+                    .order('name', { ascending: true });
 
                 if (fetchError) throw fetchError;
 
@@ -41,27 +46,41 @@ const Categories = () => {
             }
         };
 
-        fetchCategories();
-    }, []); // Empty dependency array ensures this runs only once on mount
+        // Only fetch if supabase client is available
+        if (supabase) {
+            fetchCategories();
+        }
+    }, [supabase]); // Dependency on supabase client instance
 
-    // category handler - dispatches the selected category's UUID
+    // category handler - updates the URL search parameter
     const categoryHandler = (e) => {
-        dispatch(addCategory(e.target.value)); // e.target.value will be the category UUID
+        const newCategorySlug = e.target.value;
+        const params = new URLSearchParams(searchParams);
+
+        if (newCategorySlug) {
+            params.set('category', newCategorySlug);
+        } else {
+            params.delete('category'); // Remove category if "Choose a category" is selected
+        }
+        params.set('page', '1'); // Reset page on filter change
+        // Assuming this component is used on the /jobs page
+        router.push(`/jobs?${params.toString()}`, { scroll: false });
     };
 
     return (
         <>
             <select
                 className="form-select"
-                value={jobList.category || ""} // Use the category UUID from Redux state, default to empty string
+                value={currentCategory} // Control value from URL search param
                 onChange={categoryHandler}
-                disabled={loading || error} // Disable while loading or if error occurred
+                disabled={loading || error || !supabase} // Disable if loading, error, or no client
             >
                 <option value="">Choose a category</option>
-                {loading && <option value="">Loading...</option>}
-                {error && <option value="">Error loading</option>}
+                {loading && <option value="" disabled>Loading...</option>}
+                {error && <option value="" disabled>Error loading</option>}
                 {!loading && !error && categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}> {/* Use UUID as value */}
+                    // Use slug as the value for the URL parameter
+                    <option key={cat.id} value={cat.id}>
                         {cat.name}
                     </option>
                 ))}

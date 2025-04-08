@@ -7,22 +7,22 @@ const mainMenuData = [
   {
     id: 2,
     name: "Browse Jobs",
-    routePath: "/job-list-v2",
+    routePath: "/jobs",
   },
   {
     id: 3,
     name: "Employers",
-    routePath: "/employers-list-v1",
+    routePath: "/employers",
   },
   {
     id: 4,
     name: "Candidates",
-    routePath: "/candidates-list-v1",
+    routePath: "/candidates",
   },
   {
     id: 5,
     name: "Blog",
-    routePath: "/blog-list-v1",
+    routePath: "/blog",
   },
   {
     id: 6,
