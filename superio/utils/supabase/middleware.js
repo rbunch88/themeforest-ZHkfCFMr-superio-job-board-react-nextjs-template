@@ -2,7 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 
 // Define the createClient function matching the new structure
-export function createClient(request) {
+export async function createClient(request) {
   // Create an initial response object
   let supabaseResponse = NextResponse.next({
     request: {
@@ -39,7 +39,9 @@ export function createClient(request) {
     }
   )
 
-  // Return the response object. Middleware logic (like auth checks)
-  // should happen *before* this utility is called or *after* in the main middleware file.
-  return supabaseResponse
+  // Fetch the user session after initializing the Supabase client
+  const { data: { session } } = await supabase.auth.getSession();
+
+  // Return the supabase client, session, and response object
+  return { supabase, session, response: supabaseResponse }
 }

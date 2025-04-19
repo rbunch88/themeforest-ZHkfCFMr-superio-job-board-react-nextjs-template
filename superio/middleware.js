@@ -1,39 +1,65 @@
-import { createClient } from './utils/supabase/middleware'
 import { NextResponse } from 'next/server';
+import { createServerClient } from '@supabase/ssr' // Use standard SSR client
 
-export async function middleware(req) {
-  // Update session and get response (might be redirect)
-  const response = createClient(req); // Use the new synchronous function
+export async function middleware(request) {
+  // Create a response object that we can modify and return
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  })
 
-  // Check if updateSession already decided to redirect
-  if (response.redirected) {
-     return response;
-  }
+  // Create Supabase client for middleware using standard SSR pattern
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    {
+      cookies: {
+        get(name) {
+          return request.cookies.get(name)?.value
+        },
+        set(name, value, options) {
+          // If the cookie is set, update the request and response cookies
+          request.cookies.set({ name, value, ...options })
+          response = NextResponse.next({ // Recreate response to apply changes
+            request: {
+              headers: request.headers,
+            },
+          })
+          response.cookies.set({ name, value, ...options })
+        },
+        remove(name, options) {
+          // If the cookie is removed, update the request and response cookies
+          request.cookies.set({ name, value: '', ...options })
+          response = NextResponse.next({ // Recreate response to apply changes
+            request: {
+              headers: request.headers,
+            },
+          })
+          response.cookies.set({ name, value: '', ...options })
+        },
+      },
+    }
+  )
 
-  // NOTE: The following path/role logic currently relies on 'session' and 'supabase'
-  // which are no longer defined here after refactoring to use updateSession.
-  // This logic will need to be adapted in a subsequent step, potentially
-  // by modifying updateSession to return the session object alongside the response.
+  // Refresh session and get current user data
+  const { data: { session } } = await supabase.auth.getSession()
 
-  // --- Existing path/role checking logic (currently broken, needs adaptation) ---
+  // --- Existing Role-Based Logic ---
+  const { pathname } = request.nextUrl;
+  const loginUrl = new URL('/login', request.url);
 
-  const { pathname } = req.nextUrl;
-  const loginUrl = new URL('/login', req.url); // Construct login URL based on request
-
-  
-    // Define protected dashboard paths
-    const employerDashboardPaths = ['/employers-dashboard', '/candidates']; // Updated candidates list path
-    const candidateDashboardPaths = ['/candidates-dashboard'];
-    // Combine all paths that require *some* login
-    const protectedPaths = [...employerDashboardPaths, ...candidateDashboardPaths];
-  // Check if the current path is protected
+  // Define protected dashboard paths
+  const employerDashboardPaths = ['/employers-dashboard', '/candidates'];
+  const candidateDashboardPaths = ['/candidates-dashboard'];
+  const protectedPaths = [...employerDashboardPaths, ...candidateDashboardPaths];
   const isProtectedPath = protectedPaths.some(path => pathname.startsWith(path));
 
   if (isProtectedPath) {
     // If no session, redirect to login
     if (!session) {
       console.log('Middleware: No session, redirecting to login');
-      return NextResponse.redirect(loginUrl);
+      return NextResponse.redirect(loginUrl); // Use return to stop further execution
     }
 
     // If session exists, check role
@@ -45,8 +71,8 @@ export async function middleware(req) {
 
     if (profileError || !profile) {
       console.error('Middleware: Error fetching profile or profile not found', profileError);
-      // Decide how to handle: redirect to login or show error? Redirecting to login is safer.
-      return NextResponse.redirect(loginUrl);
+      // Redirecting to login is safer.
+      return NextResponse.redirect(loginUrl); // Use return
     }
 
     // Check if user role matches the required dashboard
@@ -56,40 +82,26 @@ export async function middleware(req) {
 
     if (isEmployerPath && userRole !== 'employer') {
       console.log(`Middleware: Role mismatch (${userRole}) for employer path, redirecting`);
-      // Redirect non-employers away from employer dashboard (e.g., to candidate dashboard or home)
-      return NextResponse.redirect(new URL('/candidates-dashboard/dashboard', req.url)); // Or '/'
+      return NextResponse.redirect(new URL('/candidates-dashboard/dashboard', request.url)); // Use return
     }
 
     if (isCandidatePath && userRole !== 'candidate') {
       console.log(`Middleware: Role mismatch (${userRole}) for candidate path, redirecting`);
-      // Redirect non-candidates away from candidate dashboard (e.g., to employer dashboard or home)
-      return NextResponse.redirect(new URL('/employers-dashboard/dashboard', req.url)); // Or '/'
+      return NextResponse.redirect(new URL('/employers-dashboard/dashboard', request.url)); // Use return
     }
 
-    // Role matches or it's an admin (if admin role exists and has access) - allow access
+    // Role matches - allow access
     console.log(`Middleware: Access granted for role ${userRole} to path ${pathname}`);
   }
+  // --- End Role-Based Logic ---
 
-  // Allow the request to proceed for non-protected paths or authorized users
-  // Return the response object handled by the utility function
-  return response;
+  // Return the response (possibly modified by cookie updates or redirects)
+  return response
 }
 
-// Define which paths the middleware should run on
+// Keep existing config, add common asset extensions
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - login
-     * - register
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico|login|register).*)',
-    // Explicitly include dashboard paths if the negative lookahead isn't sufficient (optional)
-    // '/employers-dashboard/:path*',
-    // '/candidates-dashboard/:path*',
+    '/((?!api|_next/static|_next/image|favicon.ico|login|register|.*\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };

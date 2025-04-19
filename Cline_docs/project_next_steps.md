@@ -39,15 +39,15 @@
 
 ---
 
-## Phase 3: Finalize Authentication
+## Phase 3: Verify & Test Authentication
 
 - **Verify:**
-    - Sign up, login, logout flows.
-    - Role-based redirects (candidate vs employer).
-    - Middleware protections for dashboards and applicant list.
+    - [x] Authentication code refactor complete (Sign up, login, logout, role-based redirects, middleware protections).
+    - [ ] Begin manual testing of all authentication flows and role-based redirects.
+    - [ ] Confirm middleware protections for dashboards and applicant list are enforced.
 - **Test:**
-    - Candidate dashboard: profile update, certifications, resume upload.
-    - Employer dashboard: post job, view applicants.
+    - [ ] Candidate dashboard: profile update, certifications, resume upload (test with new and existing users).
+    - [ ] Employer dashboard: post job, view applicants (test with new and existing users).
 
 ---
 
@@ -94,7 +94,7 @@
 graph TD
     A[Fix Initial Load Errors (SSR, Dep, /employers)] --> B[Fix /job/[slug] Error]
     B --> C[Manual Testing (Public Routes)]
-    C --> D[Finalize Authentication]
+    C --> D[Verify/Test Authentication]
     D --> E[Manual Testing (Auth Routes)]
     E --> F[Payment Integration]
     F --> G[Content Migration]
@@ -116,7 +116,7 @@ graph TD
 - Backend is largely complete and well-structured.
 - Initial critical frontend blockers (dependency conflict, Supabase SSR setup, `/employers` page errors) have been resolved.
 - Immediate priority: **fix `/job/[slug]` page load error**.
-- Then, **proceed with manual testing**, **finalize authentication**, **integrate payments**, **migrate content**, **polish frontend**, and **deploy**.
+- Then, **proceed with manual testing** (authentication refactor code is complete), **verify/test authentication flows**, **integrate payments**, **migrate content**, **polish frontend**, and **deploy**. After fixing the `/job/[slug]` error, authentication testing is the next active step.
 
 ---
 

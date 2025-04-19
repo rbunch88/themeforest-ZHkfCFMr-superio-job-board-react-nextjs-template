@@ -69,14 +69,10 @@ const ShopHeader = () => {
             </button>
           </Link>
           <div className="btn-box">
-            <a
-              href="#"
-              className="theme-btn btn-style-one"
-              data-bs-toggle="modal"
-              data-bs-target="#loginPopupModal"
-            >
+            {/* Replace modal trigger with direct link */}
+            <Link href="/login" className="theme-btn btn-style-one">
               Login / Register
-            </a>
+            </Link>
           </div>
         </div>
       </div>

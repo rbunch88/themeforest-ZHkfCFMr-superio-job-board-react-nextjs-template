@@ -32,13 +32,14 @@
 * [x] **Storage Setup:** Created `avatars`, `company_logos`, `resumes`, `blog_images` buckets and applied RLS policies.
 * [x] **Frontend Implementation:**
   * [x] Supabase Client Setup & Refactor (Installed `@supabase/ssr`, created/refactored utilities, added env vars)
-  * [x] Authentication UI & Logic (Sign up, Sign in, Role Handling, Redirection)
+  * [x] Authentication UI & Logic (Sign up, Sign in, Role Handling, Redirection) - Core refactor complete
   * [x] Bug Fixes:
     * [x] Fixed `/jobs` "No jobs found" issue (salary/tag filter logic, pagination logic).
     * [x] Debugging `/employers` load errors (Resolved: SSR setup, query syntax, searchParams, NaN display).
     * [x] Debugging `/blog` load error (Resolved: SSR setup, component import). // New client component error identified
     * [ ] Debugging `/job/[slug]` load error (`id is not defined` - likely incorrect parsing).
-  * [x] Route Protection (Middleware - including `/candidates` for employers) - *Refactored to align with docs*
+  * [x] Route Protection (Middleware - including `/candidates` for employers) - Refactored & Fixed
+  * [ ] Testing Authentication Flow
   * [x] Data Fetching & Display (Jobs, Employers, Candidates, Blog)
     * [x] Job List Fetching & Filtering (`/jobs`)
     * [x] Employer List Fetching (`/employers`) - *Load errors resolved*

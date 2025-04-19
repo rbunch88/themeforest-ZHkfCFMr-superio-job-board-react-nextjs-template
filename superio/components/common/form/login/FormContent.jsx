@@ -1,5 +1,4 @@
 import Link from "next/link";
-import LoginWithSocial from "./LoginWithSocial";
 
 const FormContent = () => {
   return (
@@ -65,12 +64,6 @@ const FormContent = () => {
             Signup
           </Link>
         </div>
-
-        <div className="divider">
-          <span>or</span>
-        </div>
-
-        <LoginWithSocial />
       </div>
       {/* End bottom-box LoginWithSocial */}
     </div>

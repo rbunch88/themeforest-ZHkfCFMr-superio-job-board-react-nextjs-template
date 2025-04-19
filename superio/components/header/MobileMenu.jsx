@@ -31,14 +31,10 @@ const MobileMenu = () => {
 
           <div className="outer-box">
             <div className="login-box">
-              <a
-                href="#"
-                className="call-modal"
-                data-bs-toggle="modal"
-                data-bs-target="#loginPopupModal"
-              >
+              {/* Replace modal trigger with direct link */}
+              <Link href="/login" className="call-modal">
                 <span className="icon icon-user"></span>
-              </a>
+              </Link>
             </div>
             {/* login popup end */}
 

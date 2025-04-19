@@ -1,4 +1,3 @@
-
 'use client'
 
 import Link from "next/link";
@@ -54,14 +53,9 @@ const DefaulHeader = () => {
         <div className="outer-box">
           {/* <!-- Login/Register --> */}
           <div className="btn-box">
-            <a
-              href="#"
-              className="theme-btn btn-style-three call-modal"
-              data-bs-toggle="modal"
-              data-bs-target="#loginPopupModal"
-            >
+            <Link href="/login" className="theme-btn btn-style-three">
               Login / Register
-            </a>
+            </Link>
             <Link
               href="/employers-dashboard/post-jobs"
               className="theme-btn btn-style-one"

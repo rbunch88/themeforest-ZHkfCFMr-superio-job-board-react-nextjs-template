@@ -1,8 +1,11 @@
 import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 
 // Define a function to create the client instance for Server Components.
-// It accepts the cookieStore instance from the caller (e.g., a Server Component or Route Handler).
-export function createClient(cookieStore) {
+// It accepts no parameters.
+export function createClient() {
+  const cookieStore = cookies()
+
   // Ensure environment variables are available
   // Note: Using NEXT_PUBLIC_ variables on the server is generally okay in Next.js,
   // but sensitive keys should ideally use non-public variables if possible.
@@ -16,6 +19,8 @@ export function createClient(cookieStore) {
     // Depending on the desired behavior, you might return null or throw an error.
     // For now, let's proceed assuming they might be set later or handled elsewhere.
     // However, createServerClient will likely fail without them.
+    // Throwing an error might be better for debugging missing env vars
+    throw new Error("Supabase environment variables are not set.");
   }
 
   return createServerClient(
@@ -23,35 +28,28 @@ export function createClient(cookieStore) {
     supabaseAnonKey,
     {
       cookies: {
-        getAll() {
-          // Ensure cookieStore is valid and has getAll method
-          return typeof cookieStore?.getAll === 'function' ? cookieStore.getAll() : [];
+        get(name) {
+          return cookieStore.get(name)?.value
         },
-        setAll(cookiesToSet) {
-          // Ensure cookieStore is valid, has set method, and cookiesToSet is an array
-          if (typeof cookieStore?.set === 'function' && Array.isArray(cookiesToSet)) {
-            try {
-              cookiesToSet.forEach(({ name, value, options }) => {
-                // Basic validation for name and value
-                if (name && value !== undefined) {
-                  cookieStore.set(name, value, options);
-                }
-              });
-            } catch (error) {
-              console.error('Error setting cookies in Supabase server client:', error);
-            }
+        set(name, value, options) {
+          try {
+            cookieStore.set({ name, value, ...options })
+          } catch (error) {
+            // The `set` method was called from a Server Component.
+            // This can be ignored if you have middleware refreshing
+            // user sessions.
           }
         },
-        // Optional: Add remove method based on common Supabase patterns if needed later
-        // remove(name, options) {
-        //   if (typeof cookieStore?.set === 'function' && name) {
-        //     try {
-        //       cookieStore.set({ name, value: '', ...options });
-        //     } catch (error) {
-        //       console.error(`Error removing cookie "${name}":`, error);
-        //     }
-        //   }
-        // }
+        remove(name, options) {
+          try {
+            // In Next.js, setting a cookie with an empty value deletes it.
+            cookieStore.set({ name, value: '', ...options })
+          } catch (error) {
+            // The `delete` method was called from a Server Component.
+            // This can be ignored if you have middleware refreshing
+            // user sessions.
+          }
+        },
       },
     }
   );

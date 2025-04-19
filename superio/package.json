@@ -7,11 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "node ./tests/auth.spec.js",
     "seed": "node ./supabase/seed/seed.js"
   },
   "dependencies": {
     "@faker-js/faker": "^8.1.0",
     "@reduxjs/toolkit": "^1.9.6",
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
     "aos": "^2.3.4",
@@ -44,7 +47,8 @@
     "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "puppeteer": "^24.6.1"
   },
   "type": "module"
 }
