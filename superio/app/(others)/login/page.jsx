@@ -1,34 +1,49 @@
 'use client';
 
-import dynamic from "next/dynamic";
-import { Auth } from '@supabase/auth-ui-react'
-import { ThemeSupa } from '@supabase/auth-ui-shared'
-import { createClient } from "@/utils/supabase/client";
-
-// Remove metadata export as it's not allowed in Client Components
-// export const metadata = {
-//   title: "Login | My ABA Jobs",
-//   description: "Login to your My ABA Jobs account to manage job postings or your candidate profile.",
-// }
+import { useEffect } from 'react';
+import { useUser, SignInButton } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
+import Link from "next/link";
 
 const LoginPage = () => {
-  const supabase = createClient();
-  // Use the planned callback URL
-  const redirectURL = '/auth/callback';
+  const { isSignedIn, isLoaded } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      router.push('/'); // Redirect to homepage if already signed in
+    }
+  }, [isLoaded, isSignedIn, router]);
+
+  if (!isLoaded || isSignedIn) {
+    // Show a loading state or null while checking auth state or redirecting
+    return <div style={{ textAlign: 'center', marginTop: '100px' }}>Loading...</div>;
+  }
 
   return (
-    <div style={{ maxWidth: '420px', margin: '96px auto' }}>
-        <Auth
-            supabaseClient={supabase}
-            appearance={{ theme: ThemeSupa }}
-            providers={['google']}
-            redirectTo={redirectURL} // Ensure this uses the updated variable
-            view="sign_in"
-            showLinks={true}
-            onlyThirdPartyProviders={false}
-        />
+    <div className="login-page-wrapper" style={{ maxWidth: '600px', margin: '96px auto', textAlign: 'center', padding: '30px' }}>
+        <div className="login-message">
+            <h2>Sign In to Your Account</h2>
+            <p style={{ margin: '20px 0' }}>Please sign in to access your account.</p>
+            
+            <div style={{ margin: '30px 0' }}>
+              <SignInButton mode="modal">
+                <button className="theme-btn btn-style-one" style={{ padding: '12px 30px', fontSize: '16px' }}>
+                  Sign In Here
+                </button>
+              </SignInButton>
+            </div>
+            
+            <p>Don't have an account? <Link href="/register" style={{ textDecoration: 'underline' }}>Sign up here</Link>.</p>
+            
+            <div style={{ marginTop: '30px' }}>
+              <Link href="/" className="theme-btn btn-style-three">
+                Back to Home
+              </Link>
+            </div>
+        </div>
     </div>
   );
 };
 
-export default dynamic(() => Promise.resolve(LoginPage), { ssr: false });
+export default LoginPage;

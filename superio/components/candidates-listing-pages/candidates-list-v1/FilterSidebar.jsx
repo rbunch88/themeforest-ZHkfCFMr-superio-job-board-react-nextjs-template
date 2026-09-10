@@ -3,7 +3,7 @@ import DestinationRangeSlider from "../components/DestinationRangeSlider";
 import LocationBox from "../components/LocationBox";
 import SearchBox from "../components/SearchBox";
 import DatePosted from "../components/DatePosted"; // Keep this, will filter application_date
-import ExperienceLevel from "../components/ExperienceLevel"; // Changed from Experience
+import ExperienceLevel from '@/components/job-listing-pages/components/ExperienceLevel';
 // import Categories from "../components/Categories"; // Removed
 // import Qualification from "../components/Qualification"; // Removed
 

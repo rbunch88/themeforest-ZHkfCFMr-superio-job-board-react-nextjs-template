@@ -1,12 +1,8 @@
 import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
 
-/**
- * Returns a configured Supabase client for Server Components / API routes.
- * If you need cookie-based auth, supply a `RequestCookies` object (e.g. `cookies()` from next/headers).
- */
-export const createClient = (cookieStore = cookies()) => {
-  return createServerClient(
+export const createServerSupabaseClient = (cookieStore = cookies()) =>
+  createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
@@ -17,7 +13,7 @@ export const createClient = (cookieStore = cookies()) => {
       },
     }
   );
-};
 
-// Export the factory so callers decide when to create the client inside a request scope
-export default createClient;
+
+
+export default createServerSupabaseClient;

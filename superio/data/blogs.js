@@ -136,3 +136,4 @@ module.exports = [
       "7 Tips For Your Job Interviews the sunshine - and shadows will fall behind you.",
   },
 ];
+export default module.exports;

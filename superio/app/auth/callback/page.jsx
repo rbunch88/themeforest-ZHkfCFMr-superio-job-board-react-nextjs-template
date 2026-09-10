@@ -2,89 +2,52 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/utils/supabase/client';
+import { useAuth, useOrganization } from '@clerk/nextjs';
 
 export default function AuthCallback() {
   const router = useRouter();
-  const supabase = createClient();
+  const { isLoaded, userId, isSignedIn } = useAuth();
+  const { organization } = useOrganization();
 
   useEffect(() => {
-    // Listener for authentication state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('Auth state changed:', event, 'Session:', session ? ' vorhanden' : 'null');
+    if (!isLoaded) return;
 
-      // We are primarily interested in the SIGNED_IN event which occurs after redirect
-      if (event === 'SIGNED_IN' && session?.user) {
-        const userId = session.user.id;
-        console.log('SIGNED_IN event received, fetching profile for user ID:', userId);
-
+    async function checkUserProfile() {
+      if (isSignedIn && userId) {
+        console.log('User is signed in');
+        
         try {
-          // Fetch the user's profile
-          const { data: profile, error: profileError } = await supabase
-            .from('profiles')
-            .select('role')
-            .eq('id', userId)
-            .single();
-
-          if (profileError) {
-            console.error('Error fetching profile:', profileError.message, 'Code:', profileError.code);
-            // If the error is specifically 'PGRST116' (No rows found), it means the profile doesn't exist yet.
-            if (profileError.code === 'PGRST116') {
-              console.log('Profile not found (likely new user), redirecting to complete profile.');
-              router.push('/complete-profile');
-            } else {
-              // For other DB errors, redirect to login with an error
-              router.push(`/login?error=profile_fetch_failed&code=${profileError.code}`);
-            }
-            return; // Stop further processing in case of error
-          }
-
-          console.log('Profile fetched:', profile);
-
-          // Redirect based on role
-          if (profile?.role) {
-            if (profile.role === 'Employer') {
-              console.log('Redirecting Employer to employer-dashboard');
-              router.push('/employer-dashboard/dashboard');
-            } else if (profile.role === 'Candidate') { // Make sure role name matches exactly
-              console.log('Redirecting Candidate to candidate-dashboard');
-              router.push('/candidate-dashboard/dashboard');
-            } else {
-              console.warn('Unexpected user role found:', profile.role);
-              router.push('/login?error=unexpected_role');
-            }
+          // For now, we'll use Clerk's user metadata to determine the user's role
+          // In a real implementation, you would fetch this from your database or set it in Clerk's user metadata
+          
+          // Check if user is part of an organization (this is a Clerk concept)
+          if (organization) {
+            console.log('User is part of an organization, redirecting to employer dashboard');
+            router.push('/employers-dashboard/dashboard');
           } else {
-            // If role is null or undefined in the profile, redirect to complete profile
-            console.log('Profile exists but role is null, redirecting to complete profile.');
-            router.push('/complete-profile');
+            // Default to candidate dashboard for now
+            // In a real implementation, you would check user metadata or your database
+            console.log('User is not part of an organization, redirecting to candidate dashboard');
+            router.push('/candidates-dashboard/dashboard');
           }
-        } catch (err) {
-          console.error('Unexpected error fetching profile or redirecting:', err);
-          router.push('/login?error=callback_processing_exception');
+        } catch (error) {
+          console.error('Error during auth callback:', error);
+          router.push('/?error=auth_callback_failed');
         }
-      } else if (event === 'INITIAL_SESSION') {
-         // This event might fire if a session already exists. Handle similarly if needed,
-         // but SIGNED_IN after redirect is the primary target here.
-         console.log('INITIAL_SESSION event');
-         // Potentially add similar profile fetch/redirect logic if needed for this case too
-      } else if (event === 'SIGNED_OUT') {
-         console.log('SIGNED_OUT event');
-         router.push('/login?message=signed_out');
+      } else {
+        // User is not signed in
+        console.log('User is not signed in, redirecting to home');
+        router.push('/');
       }
-      // Handle other events like USER_UPDATED, PASSWORD_RECOVERY if necessary
-    });
+    }
+    
+    checkUserProfile();
+  }, [isLoaded, userId, isSignedIn, organization, router]);
 
-    // Cleanup function to unsubscribe from the listener when the component unmounts
-    return () => {
-      subscription?.unsubscribe();
-    };
-  }, [router, supabase]); // Dependencies for useEffect
-
-  // Keep the loading indicator while waiting for the auth state change
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <p>Processing authentication, please wait...</p>
-      {/* Optionally, add a loading spinner component here */}
+    <div className="flex min-h-screen flex-col items-center justify-center">
+      <h2 className="mb-4 text-2xl font-semibold">Checking your login...</h2>
+      <p>You'll be redirected automatically.</p>
     </div>
   );
 }

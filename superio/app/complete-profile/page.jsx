@@ -1,37 +1,49 @@
-import { createClient } from '@/utils/supabase/server' // Use server client
 import { redirect } from 'next/navigation'
+import { auth } from '@clerk/nextjs/server'
 import { updateProfile } from './actions' // Import the server action
+import { createServerSupabaseClient } from '@/lib/supabase-server'
 
 // Make it an async Server Component
 export default async function CompleteProfilePage({ searchParams }) {
-  const supabase = createClient() // Uses cookies() from next/headers
-
-  // Fetch user server-side
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) {
+  // Get user from Clerk
+  const { userId } = auth()
+  
+  if (!userId) {
     // Middleware should handle this, but as a safeguard
-    return redirect('/login?message=You need to be logged in to complete your profile')
+    return redirect('/?message=You need to be logged in to complete your profile')
   }
+  
+  const supabase = await createServerSupabaseClient()
 
-  // Check if profile already exists and has a role, server-side
-  const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    .select('role, first_name, last_name') // Select fields to pre-fill
-    .eq('id', user.id)
-    .maybeSingle(); // Handles profile not existing yet
-
-  if (profileError && profileError.code !== 'PGRST116') { // Ignore 'Row not found'
-      console.error("Complete Profile Page: Error fetching profile", profileError);
-      // Consider rendering an error message within the page
-  }
-
-  // If role is already set, redirect server-side
-  if (profile?.role === 'employer') {
+  // Check if profiles already exist
+  const { data: employerProfile } = await supabase
+    .from('employer_profile')
+    .select('*')
+    .eq('clerk_user_id', userId)
+    .maybeSingle();
+    
+  const { data: candidateProfile } = await supabase
+    .from('candidate_profile')
+    .select('*')
+    .eq('clerk_user_id', userId)
+    .maybeSingle();
+  
+  // If profile already exists, redirect to appropriate dashboard
+  if (employerProfile) {
     return redirect('/employers-dashboard/dashboard?message=Profile already complete');
-  } else if (profile?.role === 'candidate') {
+  } else if (candidateProfile) {
     return redirect('/candidates-dashboard/dashboard?message=Profile already complete');
   }
+  
+  // Get user data from Clerk
+  const { getToken, getUser } = auth();
+  const user = await getUser();
+  const token = await getToken();
+  const tokenData = token ? JSON.parse(atob(token.split('.')[1])) : {};
+  const orgId = tokenData?.org_id;
+  
+  // Pre-select role if user is part of an organization
+  const preSelectedRole = orgId ? 'employer' : searchParams?.role || '';
 
   // Get potential error message from Server Action redirect
   const errorMessage = searchParams?.message
@@ -56,8 +68,8 @@ export default async function CompleteProfilePage({ searchParams }) {
           <input
             type="email"
             id="email"
-            name="email" // Good practice, even if not used by action
-            defaultValue={user.email}
+            name="email"
+            defaultValue={user?.emailAddresses?.[0]?.emailAddress || ''}
             readOnly
             style={{ width: '100%', padding: '8px', boxSizing: 'border-box', background: '#eee' }}
           />
@@ -70,7 +82,7 @@ export default async function CompleteProfilePage({ searchParams }) {
             type="text"
             id="firstName"
             name="firstName"
-            defaultValue={profile?.first_name || ''} // Pre-fill if exists
+            defaultValue={user?.firstName || ''}
             required
             style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
           />
@@ -83,24 +95,79 @@ export default async function CompleteProfilePage({ searchParams }) {
             type="text"
             id="lastName"
             name="lastName"
-            defaultValue={profile?.last_name || ''} // Pre-fill if exists
+            defaultValue={user?.lastName || ''}
             required
             style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
           />
         </div>
-
+        
         {/* Role Selection (Required) */}
         <div style={{ marginBottom: '20px' }}>
           <label style={{ display: 'block', marginBottom: '5px' }}>Select Your Role</label>
           <div>
             <label style={{ marginRight: '20px' }}>
-              <input type="radio" name="role" value="candidate" required /> Candidate (Job Seeker)
+              <input 
+                type="radio" 
+                name="role" 
+                value="candidate" 
+                defaultChecked={preSelectedRole === 'candidate'} 
+                disabled={preSelectedRole === 'employer'}
+                required 
+              /> 
+              Candidate (Job Seeker)
             </label>
             <label>
-              <input type="radio" name="role" value="employer" required /> Employer
+              <input 
+                type="radio" 
+                name="role" 
+                value="employer" 
+                defaultChecked={preSelectedRole === 'employer'}
+                disabled={preSelectedRole === 'employer'}
+                required 
+              /> 
+              Employer
             </label>
           </div>
         </div>
+        
+        {/* Conditional fields based on role */}
+        {preSelectedRole === 'employer' && (
+          <>
+            <div style={{ marginBottom: '15px' }}>
+              <label htmlFor="companyName" style={{ display: 'block', marginBottom: '5px' }}>Company Name</label>
+              <input
+                type="text"
+                id="companyName"
+                name="companyName"
+                required
+                style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
+              />
+            </div>
+            <div style={{ marginBottom: '15px' }}>
+              <label htmlFor="title" style={{ display: 'block', marginBottom: '5px' }}>Your Title</label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                placeholder="e.g. HR Manager, Recruiter"
+                style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
+              />
+            </div>
+          </>
+        )}
+        
+        {preSelectedRole !== 'employer' && (
+          <div style={{ marginBottom: '15px' }}>
+            <label htmlFor="headline" style={{ display: 'block', marginBottom: '5px' }}>Professional Headline</label>
+            <input
+              type="text"
+              id="headline"
+              name="headline"
+              placeholder="e.g. Senior Software Engineer, Marketing Specialist"
+              style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
+            />
+          </div>
+        )}
 
         {/* Submit Button */}
         <button

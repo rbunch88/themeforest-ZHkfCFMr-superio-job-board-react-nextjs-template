@@ -469,3 +469,4 @@ module.exports = [
         qualification: "Certificate",
     },
 ];
+export default module.exports;

@@ -1,34 +1,49 @@
 'use client';
 
-import dynamic from "next/dynamic";
-import { Auth } from '@supabase/auth-ui-react'
-import { ThemeSupa } from '@supabase/auth-ui-shared'
-import { createClient } from "@/utils/supabase/client";
-
-// Remove metadata export as it's not allowed in Client Components
-// export const metadata = {
-//   title: "Register | My ABA Jobs",
-//   description: "Create your My ABA Jobs account. Register as a job seeker or an employer to get started.",
-// }
+import { useEffect } from 'react';
+import { useUser, SignUpButton } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
+import Link from "next/link";
 
 const RegisterPage = () => {
-  const supabase = createClient();
-  // Use the planned callback URL
-  const redirectURL = '/auth/callback';
+  const { isSignedIn, isLoaded } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      router.push('/'); // Redirect to homepage if already signed in
+    }
+  }, [isLoaded, isSignedIn, router]);
+
+  if (!isLoaded || isSignedIn) {
+    // Show a loading state or null while checking auth state or redirecting
+    return <div style={{ textAlign: 'center', marginTop: '100px' }}>Loading...</div>;
+  }
 
   return (
-    <div style={{ maxWidth: '420px', margin: '96px auto' }}>
-        <Auth
-            supabaseClient={supabase}
-            appearance={{ theme: ThemeSupa }}
-            providers={['google']}
-            redirectTo={redirectURL} // Ensure this uses the updated variable
-            view="sign_up"
-            showLinks={true}
-            onlyThirdPartyProviders={false}
-        />
+    <div className="register-page-wrapper" style={{ maxWidth: '600px', margin: '96px auto', textAlign: 'center', padding: '30px' }}>
+        <div className="register-message">
+            <h2>Create a New Account</h2>
+            <p style={{ margin: '20px 0' }}>Please sign up to create your account.</p>
+            
+            <div style={{ margin: '30px 0' }}>
+              <SignUpButton mode="modal">
+                <button className="theme-btn btn-style-one" style={{ padding: '12px 30px', fontSize: '16px' }}>
+                  Sign Up Here
+                </button>
+              </SignUpButton>
+            </div>
+            
+            <p>Already have an account? <Link href="/login" style={{ textDecoration: 'underline' }}>Sign in here</Link>.</p>
+            
+            <div style={{ marginTop: '30px' }}>
+              <Link href="/" className="theme-btn btn-style-three">
+                Back to Home
+              </Link>
+            </div>
+        </div>
     </div>
   );
 };
 
-export default dynamic(() => Promise.resolve(RegisterPage), { ssr: false });
+export default RegisterPage;

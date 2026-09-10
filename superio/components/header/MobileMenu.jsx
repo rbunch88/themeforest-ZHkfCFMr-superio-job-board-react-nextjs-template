@@ -1,8 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import MobileSidebar from "./mobile-sidebar";
 import Image from "next/image";
+import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/nextjs";
 
 const MobileMenu = () => {
+  const { isSignedIn } = useUser();
   return (
     // <!-- Main Header-->
     <header className="main-header main-header-mobile">
@@ -31,10 +35,15 @@ const MobileMenu = () => {
 
           <div className="outer-box">
             <div className="login-box">
-              {/* Replace modal trigger with direct link */}
-              <Link href="/login" className="call-modal">
-                <span className="icon icon-user"></span>
-              </Link>
+              {isSignedIn ? (
+                <UserButton afterSignOutUrl="/" />
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <SignInButton mode="modal">
+                    <a className="call-modal"><span className="icon icon-user"></span></a>
+                  </SignInButton>
+                </div>
+              )}
             </div>
             {/* login popup end */}
 

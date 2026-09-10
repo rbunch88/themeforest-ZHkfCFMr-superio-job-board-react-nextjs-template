@@ -1,83 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from 'react';
-import { createClient } from '../../utils/supabase/client';
 // Import the default export from mainMenuData
 import mainMenuData from "../../data/mainMenuData";
 // Keep isActiveLink for styling the current page link
 import { isActiveLink } from "../../utils/linkActiveChecker";
 import { usePathname } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 
 const HeaderNavContent = () => {
   const pathname = usePathname(); // Get the current path
-  const [session, setSession] = useState(null);
-  const [profile, setProfile] = useState(null);
-  const supabase = createClient();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data: { session: currentSession } } = await supabase.auth.getSession(); // Renamed to avoid conflict
-      setSession(currentSession);
-
-      if (currentSession?.user) {
-        try {
-          const { data, error } = await supabase
-            .from('profiles')
-            .select('role')
-            .eq('id', currentSession.user.id)
-            .single();
-
-          if (error) {
-            console.error('Error fetching profile:', error.message);
-            setProfile(null); // Handle error case
-          } else {
-            setProfile(data);
-          }
-        } catch (error) {
-          console.error('Error fetching profile:', error.message);
-          setProfile(null);
-        }
-      } else {
-        setProfile(null); // No user, no profile
-      }
-    };
-
-    fetchData();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (_event, updatedSession) => { // Renamed to avoid conflict
-        setSession(updatedSession);
-        if (updatedSession?.user) {
-          try {
-            const { data, error } = await supabase
-              .from('profiles')
-              .select('role')
-              .eq('id', updatedSession.user.id)
-              .single();
-
-            if (error) {
-              console.error('Error fetching profile on auth change:', error.message);
-              setProfile(null);
-            } else {
-              setProfile(data);
-            }
-          } catch (error) {
-            console.error('Error fetching profile on auth change:', error.message);
-            setProfile(null);
-          }
-        } else {
-          setProfile(null);
-        }
-      }
-    );
-
-    // Cleanup listener on component unmount
-    return () => {
-      authListener?.subscription.unsubscribe();
-    };
-  }, [supabase]); // Add supabase as dependency
-
+  const { isSignedIn, user } = useUser();
+  
+  // This is a placeholder. In a real implementation, you would store user roles in your database
+  // and fetch them using Clerk's user ID. For now, we'll assume all signed-in users are "job-seekers"
+  const userRole = user?.publicMetadata?.role || "job-seeker";
 
   return (
     <>
@@ -88,7 +25,7 @@ const HeaderNavContent = () => {
             // Conditionally render the 'Candidates' item
             if (item.name === 'Candidates') {
               return (
-                session && profile?.role === 'employer' && (
+                isSignedIn && userRole === 'employer' && (
                   <li
                     className={isActiveLink(item.routePath, pathname) ? "current" : ""}
                     key={item.id}

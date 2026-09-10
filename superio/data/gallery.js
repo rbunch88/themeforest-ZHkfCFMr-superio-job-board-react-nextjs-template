@@ -4,3 +4,4 @@ module.exports = [
   { id: 3, img: "/images/resource/employers-single-3.png" },
   { id: 4, img: "/images/resource/employers-single-4.png" },
 ];
+export default module.exports;

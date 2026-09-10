@@ -84,3 +84,4 @@ module.exports = [
     active: "",
   },
 ];
+export default module.exports;

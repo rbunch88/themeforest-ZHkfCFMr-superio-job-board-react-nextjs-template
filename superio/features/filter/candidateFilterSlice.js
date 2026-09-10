@@ -92,3 +92,5 @@ export const {
     addPerPage,
 } = candidateFilterSlice.actions;
 export default candidateFilterSlice.reducer;
+// legacy alias for components expecting addDateAppliedCheck
+export { addDatePost as addDateAppliedCheck };

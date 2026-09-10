@@ -4,8 +4,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import HeaderNavContent from "./HeaderNavContent";
 import Image from "next/image";
+import { UserButton, useUser } from "@clerk/nextjs";
 
 const DefaulHeader2 = () => {
+  const { isSignedIn } = useUser();
   const [navbar, setNavbar] = useState(false);
 
   const changeBackground = () => {
@@ -55,12 +57,15 @@ const DefaulHeader2 = () => {
           <Link href="/candidates-dashboard/cv-manager" className="upload-cv">
             Upload your CV
           </Link>
-          {/* <!-- Login/Register --> */}
-          <div className="btn-box">
-            {/* Replace modal trigger with direct link */}
-            <Link href="/login" className="theme-btn btn-style-three">
-              Login / Register
-            </Link>
+          {/* <!-- Auth / Job Post Buttons --> */}
+          <div className="btn-box" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {isSignedIn ? (
+              <UserButton afterSignOutUrl="/" />
+            ) : (
+              <Link href="/login" className="theme-btn btn-style-three">
+                Login / Register
+              </Link>
+            )}
             <Link
               href="/employers-dashboard/post-jobs"
               className="theme-btn btn-style-one"

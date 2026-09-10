@@ -4,8 +4,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import HeaderNavContent from "./HeaderNavContent";
 import Image from "next/image";
+import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/nextjs";
 
 const DefaulHeader = () => {
+  const { isSignedIn } = useUser();
   const [navbar, setNavbar] = useState(false);
 
   const changeBackground = () => {
@@ -51,18 +53,31 @@ const DefaulHeader = () => {
         {/* End .nav-outer */}
 
         <div className="outer-box">
-          {/* <!-- Login/Register --> */}
-          <div className="btn-box">
-            <Link href="/login" className="theme-btn btn-style-three">
-              Login / Register
-            </Link>
-            <Link
-              href="/employers-dashboard/post-jobs"
-              className="theme-btn btn-style-one"
-            >
-              Job Post
-            </Link>
+          {/* <!-- Job Post Button --> */}
+          <div className="outer-box">
+          <div className="btn-box" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {isSignedIn ? (
+              <>
+                <UserButton afterSignOutUrl="/" />
+                <Link
+                  href="/employers-dashboard/post-jobs"
+                  className="theme-btn btn-style-one"
+                >
+                  Job Post
+                </Link>
+              </>
+            ) : (
+              <>
+                <SignInButton mode="modal">
+                  <a className="theme-btn btn-style-three">Login</a>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <a className="theme-btn btn-style-one">Register</a>
+                </SignUpButton>
+              </>
+            )}
           </div>
+        </div>
         </div>
       </div>
     </header>

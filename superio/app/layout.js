@@ -8,6 +8,14 @@ import { Provider } from "react-redux";
 import { store } from "../store/store";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import {
+  ClerkProvider,
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton
+} from "@clerk/nextjs";
 
 if (typeof window !== "undefined") {
   import("bootstrap/dist/js/bootstrap");
@@ -42,8 +50,22 @@ export default function RootLayout({ children }) {
       </head>
 
       <body>
-        <Provider store={store}>
-          <div className="page-wrapper">
+        <ClerkProvider>
+          <Provider store={store}>
+            <div className="page-wrapper">
+              <div className="auth-buttons" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1000, display: 'flex', gap: '10px' }}>
+                <SignedOut>
+                  <SignInButton mode="modal">
+                    <button className="theme-btn btn-style-one">Sign In</button>
+                  </SignInButton>
+                  <SignUpButton mode="modal">
+                    <button className="theme-btn btn-style-two">Sign Up</button>
+                  </SignUpButton>
+                </SignedOut>
+                <SignedIn>
+                  <UserButton afterSignOutUrl="/" />
+                </SignedIn>
+              </div>
             {children}
 
             {/* Toastify */}
@@ -61,8 +83,9 @@ export default function RootLayout({ children }) {
             />
             {/* <!-- Scroll To Top --> */}
             <ScrollToTop />
-          </div>
-        </Provider>
+            </div>
+          </Provider>
+        </ClerkProvider>
       </body>
     </html>
   );

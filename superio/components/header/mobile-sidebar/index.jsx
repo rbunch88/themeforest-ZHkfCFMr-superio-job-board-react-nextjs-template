@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { createClient } from '../../../utils/supabase/client';
+import { useUser } from '@clerk/nextjs';
 import {
   Sidebar,
   Menu,
@@ -23,71 +23,12 @@ const Index = () => {
   const router = useRouter();
   const pathname = usePathname(); // Get pathname for active link checking
 
-  const [session, setSession] = useState(null);
-  const [profile, setProfile] = useState(null);
-  const supabase = createClient();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data: { session: currentSession } } = await supabase.auth.getSession();
-      setSession(currentSession);
-
-      if (currentSession?.user) {
-        try {
-          const { data, error } = await supabase
-            .from('profiles')
-            .select('role')
-            .eq('id', currentSession.user.id)
-            .single();
-
-          if (error) {
-            console.error('Error fetching profile:', error.message);
-            setProfile(null);
-          } else {
-            setProfile(data);
-          }
-        } catch (error) {
-          console.error('Error fetching profile:', error.message);
-          setProfile(null);
-        }
-      } else {
-        setProfile(null);
-      }
-    };
-
-    fetchData();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (_event, updatedSession) => {
-        setSession(updatedSession);
-        if (updatedSession?.user) {
-          try {
-            const { data, error } = await supabase
-              .from('profiles')
-              .select('role')
-              .eq('id', updatedSession.user.id)
-              .single();
-
-            if (error) {
-              console.error('Error fetching profile on auth change:', error.message);
-              setProfile(null);
-            } else {
-              setProfile(data);
-            }
-          } catch (error) {
-            console.error('Error fetching profile on auth change:', error.message);
-            setProfile(null);
-          }
-        } else {
-          setProfile(null);
-        }
-      }
-    );
-
-    return () => {
-      authListener?.subscription.unsubscribe();
-    };
-  }, [supabase]);
+  // Use Clerk's useUser hook to get authentication state
+  const { isSignedIn, user } = useUser();
+  
+  // This is a placeholder. In a real implementation, you would store user roles in your database
+  // and fetch them using Clerk's user ID. For now, we'll assume all signed-in users are "job-seekers"
+  const userRole = user?.publicMetadata?.role || "job-seeker";
 
   return (
     <div
@@ -106,7 +47,7 @@ const Index = () => {
             // Conditionally render the 'Candidates' item
             if (menuItem.label === 'Candidates') {
               return (
-                session && profile?.role === 'employer' && (
+                isSignedIn && userRole === 'employer' && (
                   <MenuItem
                     key={menuItem.id}
                     onClick={() => router.push(menuItem.routePath)}

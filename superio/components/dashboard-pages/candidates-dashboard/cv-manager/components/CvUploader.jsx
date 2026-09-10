@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from "react";
-import { supabase } from "../../../../../utils/supabaseClient"; // Adjust path
+import { supabase } from '@/utils/supabaseClient';
 
 // Allowed file types
 const allowedTypes = [
